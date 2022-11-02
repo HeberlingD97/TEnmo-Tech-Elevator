@@ -12,9 +12,9 @@ namespace TenmoClient.Services
 
         // Add methods to call api here...
         // 3. As an authenticated user of the system, I need to be able to see my Account Balance.
-        public decimal GetBalance()
+        public decimal GetBalance(ApiUser user)
         {
-            RestRequest request = new RestRequest("balance");
+            RestRequest request = new RestRequest($"/accounts/{user.UserId}");
             IRestResponse<decimal> response = client.Get<decimal>(request);
 
             CheckForError(response);

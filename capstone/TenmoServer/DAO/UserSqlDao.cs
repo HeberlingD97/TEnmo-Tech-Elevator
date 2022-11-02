@@ -39,7 +39,7 @@ namespace TenmoServer.DAO
             }
             catch (SqlException)
             {
-                throw;
+                throw; 
             }
 
             return returnUser;

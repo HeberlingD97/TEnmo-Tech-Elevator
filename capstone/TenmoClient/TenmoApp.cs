@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using TenmoClient.Models;
 using TenmoClient.Services;
 
+
 namespace TenmoClient
 {
     public class TenmoApp
     {
         private readonly TenmoConsoleService console = new TenmoConsoleService();
         private readonly TenmoApiService tenmoApiService;
+        private ApiUser user = null;
 
         public TenmoApp(string apiUrl)
         {
@@ -74,6 +76,8 @@ namespace TenmoClient
             if (menuSelection == 1)
             {
                 // View your current balance
+                // GetBalance method, call it, display console.writeline, make sure the user still has access to the menu 
+                GetBalance();
             }
 
             if (menuSelection == 2)
@@ -106,6 +110,15 @@ namespace TenmoClient
             return true;    // Keep the main menu loop going
         }
 
+        private void GetBalance()
+        {
+            decimal balance = tenmoApiService.GetBalance(user);
+            console.GetBalance(balance);
+            //Console.WriteLine(balance);
+        }
+
+
+
         private void Login()
         {
             LoginUser loginUser = console.PromptForLogin();
@@ -124,6 +137,7 @@ namespace TenmoClient
                 else
                 {
                     console.PrintSuccess("You are now logged in");
+                    this.user = user;
                 }
             }
             catch (Exception)
@@ -157,6 +171,8 @@ namespace TenmoClient
                 console.PrintError("Registration was unsuccessful.");
             }
             console.Pause();
+
+
         }
     }
 }

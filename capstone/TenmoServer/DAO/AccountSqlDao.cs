@@ -8,12 +8,12 @@ using TenmoServer.Models;
 
 namespace TenmoServer.DAO
 {
-    public class AccountSqlDao
+    public class AccountSqlDao : IAccountDao
     {
         private string connectionString;
         //const decimal startingBalance = 1000;
 
-        private AccountSqlDao(string dbConnectionString)
+        public AccountSqlDao(string dbConnectionString)
         {
             connectionString = dbConnectionString;
         }
