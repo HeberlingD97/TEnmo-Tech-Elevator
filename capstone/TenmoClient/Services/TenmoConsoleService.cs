@@ -53,6 +53,10 @@ namespace TenmoClient.Services
 
         // Add application-specific UI methods here...
 
+        public void GetBalance()
+        {
+            Console.WriteLine($"Your current account balance is: {}");
+        }
 
     }
 }
