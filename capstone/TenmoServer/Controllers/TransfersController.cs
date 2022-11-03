@@ -40,7 +40,7 @@ namespace TenmoServer.Controllers
         [HttpGet()]
         public ActionResult<List<Transfer>> GetTransfers(User user)
         {
-            return Ok();
+        return transferDao.GetTransfers(user);
         }
 
         // Put: TransfersController/Edit/5
