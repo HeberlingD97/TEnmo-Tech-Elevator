@@ -23,7 +23,7 @@ namespace TenmoServer.Controllers
         }
         
         // POST: TransfersController/Create
-        [HttpPost()]
+        [HttpPost("{UserId}")]
         public ActionResult<Transfer> CreateTransfer(User user, Transfer transfer)
         {
             Transfer createdTransfer = transferDao.CreateTransfer(user, transfer);
@@ -45,9 +45,8 @@ namespace TenmoServer.Controllers
             }
         }
     
-
         // GET: TransfersController
-        [HttpGet()] //possibly use user url
+        [HttpGet("{UserId}")] //possibly use user url
         public ActionResult<List<Transfer>> GetTransfers(User user)
         {
             if (User.Identity.Name != null)
@@ -61,34 +60,40 @@ namespace TenmoServer.Controllers
         }
 
         // Put: TransfersController/Edit/5
-        [HttpPut("{transferId}")]
-        public ActionResult UpdateSendingTransferStatus(User user, int transferId)
+        //[HttpPut("{transferId}")]
+        //public ActionResult UpdateSendingTransferStatus(User user, int transferId)
+        //{
+        //    Transfer existingTransfer = transferDao.GetSpecificTransfer(user, transferId);
+        //    if (existingTransfer == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    transferDao.UpdateSendingTransferStatus(transferId);
+        //    return Ok(); //come back to this, maybe, idk....
+        //}
+
+        [HttpPut("updateBalances")]
+        public ActionResult<bool> UpdateBalanceForTransferAccounts(Transfer transfer)
         {
-            Transfer existingTransfer = transferDao.GetSpecificTransfer(user, transferId);
-            if (existingTransfer == null)
+            bool result = transferDao.UpdateBalanceForTransferAccounts(transfer);
+            if (result)
             {
-                return NotFound();
+                return Ok();
             }
-
-            transferDao.UpdateSendingTransferStatus(transferId);
-            return Ok(); //come back to this, maybe, idk....
+            else
+            {
+                return StatusCode(500);
+            }
+            
         }
 
-        [HttpPut()]
-        public ActionResult UpdateBalanceForTransferAccounts(Transfer transfer)
-        {
-
-
-            transferDao.UpdateSendingTransferStatus(transferId);
-            return Ok();
-        }
-
-        [HttpGet()]
+        [HttpGet("users")] //users to transfer to
         public ActionResult<List<User>> GetListOfUsers(User user)
         {
             if (User.Identity.Name != null)
             {
-                return transferDao.
+                return transferDao.GetListOfUsers(user);
             }
             else
             {
