@@ -94,6 +94,7 @@ namespace TenmoClient
             if (menuSelection == 4)
             {
                 // Send TE bucks
+                SendBucks();
             }
 
             if (menuSelection == 5)
@@ -123,12 +124,18 @@ namespace TenmoClient
         {
             List<Transfer> transfers = new List<Transfer>();
             transfers = tenmoApiService.ViewPastTransfers(user);
-            console.ViewPastTransfers(user);
+            console.ViewPastTransfers(user);    //Invesigate
             console.Pause();
-
-            
         }
 
+        private void SendBucks()
+        {
+            List<ApiUser> users = new List<ApiUser>();
+            users = tenmoApiService.GetUsers(user);
+            console.GetUsers();
+            console.Pause();
+            
+        }
 
 
 
