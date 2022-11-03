@@ -83,6 +83,7 @@ namespace TenmoClient
             if (menuSelection == 2)
             {
                 // View your past transfers
+                ViewPastTransfers();
             }
 
             if (menuSelection == 3)
@@ -116,6 +117,16 @@ namespace TenmoClient
             console.GetBalance(account.Balance);
             console.Pause();
             //Console.WriteLine(balance);
+        }
+
+        private void ViewPastTransfers()
+        {
+            List<Transfer> transfers = new List<Transfer>();
+            transfers = tenmoApiService.ViewPastTransfers(user);
+            console.ViewPastTransfers(user);
+            console.Pause();
+
+            
         }
 
 

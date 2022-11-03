@@ -26,36 +26,65 @@ namespace TenmoServer.Controllers
         [HttpPost()]
         public ActionResult<Transfer> CreateTransfer(User user, Transfer transfer)
         {
-            return Ok();
+            Transfer createdTransfer = transferDao.CreateTransfer(user, transfer);
+            return Created($"/transfers/{createdTransfer.TransferId}", createdTransfer);
         }
 
         // GET: TransfersController/Details/5
         [HttpGet("{transferId}")]
-        public ActionResult<Transfer> GetSpecificTransfer(User user, int transferId);
+        public ActionResult<Transfer> GetSpecificTransfer(User user, int transferId)
         {
-            return Ok();
+            Transfer transfer = transferDao.GetSpecificTransfer(user, transferId);
+            if (transfer != null)
+            {
+                return Ok(transfer);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
+    
 
         // GET: TransfersController
-        [HttpGet()]
+        [HttpGet()] //possibly use user url
         public ActionResult<List<Transfer>> GetTransfers(User user)
         {
-        return transferDao.GetTransfers(user);
+            if (User.Identity.Name != null)
+            {
+                return transferDao.GetTransfers(user);
+            }
+            else
+            {
+                return Unauthorized("Please login to view your transfers.");
+            }
+            
+
         }
 
         // Put: TransfersController/Edit/5
         [HttpPut("{transferId}")]
-        public ActionResult UpdateSendingTransferStatus(int transferId)
+        public ActionResult UpdateSendingTransferStatus(User user, int transferId)
         {
-            return Ok();
+            Transfer existingTransfer = transferDao.GetSpecificTransfer(user, transferId);
+            if (existingTransfer == null)
+            {
+                return NotFound();
+            }
+
+            transferDao.UpdateSendingTransferStatus(transferId);
+            return Ok(); //come back to this, maybe, idk....
         }
 
-        [HttpPut()]
-        public ActionResult UpdateBalanceForTransferAccounts(Transfer transfer)
-        {
-        return Ok();
-        }
+        //[HttpPut()]
+        //public ActionResult UpdateBalanceForTransferAccounts(Transfer transfer)
+        //{
+            
+            
+        //    transferDao.UpdateSendingTransferStatus(transferId);
+        //    return Ok();
+        //}
 
 
-}
+    }
 }
