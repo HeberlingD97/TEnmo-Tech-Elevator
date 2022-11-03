@@ -55,8 +55,31 @@ namespace TenmoClient.Services
 
         public void GetBalance(decimal balance)
         {
-            Console.WriteLine($"Your current account balance is: {balance}");
+            Console.WriteLine($"Your current account balance is: ${balance}");
+        }
+
+        public void ViewPastTransfers()
+        {
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("Transfers");
+            Console.WriteLine("ID From/ To                 Amount");
+            Console.WriteLine("------------------------------------------");
+            Console.WriteLine("23          From: Bernice          $ 903.14");
+            Console.WriteLine("79          To: Larry           $  12.55");
+            Console.WriteLine("-----------------------------------------");
+            Console.WriteLine("Please enter transfer ID to view details(0 to cancel): ");
         }
 
     }
 }
+
+
+//Console.WriteLine("");
+//Console.WriteLine("| --------------Users-------------- |");
+//Console.WriteLine("|    Id | Username                  |");
+//Console.WriteLine("| -------+---------------------------|");
+//Console.WriteLine($"|  {} | Bernice                   |");
+//Console.WriteLine("|  1003 | Deandre                   |");
+//            | -----------------------------------|
+//            Id of the user you are sending to[0]: 1003
+//            Enter amount to send: 75.74
