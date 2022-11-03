@@ -126,6 +126,9 @@ namespace TenmoClient
             transfers = tenmoApiService.ViewPastTransfers(user);
             console.ViewPastTransfers(user);    //Invesigate
             console.Pause();
+            // would you like to view specific transfer? 
+            // readline?
+            // tenmoapiservice view specific transfer
         }
 
         private void SendBucks()
