@@ -39,14 +39,14 @@ namespace TenmoServer.DAO
                             User u = GetUserNamesFromReader(reader);
                             users.Add(u);
                         }
-
+                        return users;
                     }
                 }
                 catch (SqlException)
                 {
                     throw;
                 }
-                return users;
+                
             
         }
         //      A transfer should include the User IDs of the from and to users and the amount of TE Bucks.
