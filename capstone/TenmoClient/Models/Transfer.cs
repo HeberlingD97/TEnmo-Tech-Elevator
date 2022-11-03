@@ -14,8 +14,8 @@ namespace TenmoClient.Models
         public int TransferStatusId { get; set; }
         public int AccountFrom { get; set; }
         public int AccountTo { get; set; }
-        [Range(0.01, double.MaxValue, ErrorMessage = "User must transfer a positive amount.")] // TODO: also can't transfer more than what is in sender's account
-        // TODO: can we cast this to a decimal?
+        [Range(0.01, 1000000000000, ErrorMessage = "User must transfer a positive amount.")] // TODO: also can't transfer more than what is in sender's account
+        // TODO: can we cast this to a decimal? quick fix was setting the max to 1 trillion
         public decimal Amount { get; set; } = 0.0M; // amount to transfer, default would be 0. add amount to default that we would transfer.
     }
 }
