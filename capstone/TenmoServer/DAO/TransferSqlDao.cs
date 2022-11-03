@@ -109,9 +109,9 @@ namespace TenmoServer.DAO
             return returnTransfer;
         }
         // As an authenticated user of the system, I need to be able to send a transfer of a specific amount of TE Bucks to a registered user.
-        public Transfer CreateTransfer(User user, Transfer transfer)
+        public Transfer CreateTransfer(User user, Transfer transfer) //TODO
         {
-            List<User> users = GetListOfUsers(user);
+            //List<User> users = GetListOfUsers(user); call list of users in view, select 1 user to assign to account_to
             int newTransferId;
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -132,28 +132,28 @@ namespace TenmoServer.DAO
         }
 
         //      A Sending Transfer has an initial status of Approved.
-        public void UpdateSendingTransferStatus(int transferId) // possibly come back to this
-        {
+        //public void UpdateSendingTransferStatus(int transferId) // possibly come back to this
+        //{
             
-            try // try reading from SQL all data where we have given uder id
-            {
-                using (SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    conn.Open();
+        //    try // try reading from SQL all data where we have given uder id
+        //    {
+        //        using (SqlConnection conn = new SqlConnection(connectionString))
+        //        {
+        //            conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("UPDATE transfer SET transfer_status_id = 2 WHERE transfer_id = @transfer_id", conn);
-                    cmd.Parameters.AddWithValue("@transfer_id", transferId);
-                    cmd.ExecuteNonQuery();          
-                }
-            }
-            catch (SqlException)
-            {
-                throw;
-            }
+        //            SqlCommand cmd = new SqlCommand("UPDATE transfer SET transfer_status_id = 2 WHERE transfer_id = @transfer_id", conn);
+        //            cmd.Parameters.AddWithValue("@transfer_id", transferId);
+        //            cmd.ExecuteNonQuery();          
+        //        }
+        //    }
+        //    catch (SqlException)
+        //    {
+        //        throw;
+        //    }
             
-        }
+        //}
         //      The receiver's account balance is increased by the amount of the transfer.
-        public void UpdateBalanceForTransferAccounts(Transfer transfer) /// posibly edit transfer
+        public bool UpdateBalanceForTransferAccounts(Transfer transfer) // possibly edit transfer
         {
             try // try reading from SQL all data where we have given uder id
             {
@@ -176,6 +176,7 @@ namespace TenmoServer.DAO
                     cmd.Parameters.AddWithValue("@transfer_id", transfer.TransferId);
                     cmd.ExecuteNonQuery();
                     // write line successful transfer
+                    return true;
                 }
             }
             catch (SqlException)
