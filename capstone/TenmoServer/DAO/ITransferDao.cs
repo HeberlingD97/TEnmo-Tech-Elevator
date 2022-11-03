@@ -10,7 +10,7 @@ namespace TenmoServer.DAO
     {
         // As an authenticated user of the system, I need to be able to send a transfer of a specific amount of TE Bucks to a registered user.
         //      I should be able to choose from a list of users to send TE Bucks to.
-        //List<User> GetListOfUsers(User user);
+        List<User> GetListOfUsers(User user);
         //      A transfer should include the User IDs of the from and to users and the amount of TE Bucks.
         public Transfer CreateTransfer(User user, Transfer transfer);
         //      A Sending Transfer has an initial status of Approved.
