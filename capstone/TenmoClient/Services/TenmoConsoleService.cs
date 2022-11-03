@@ -108,7 +108,7 @@ namespace TenmoClient.Services
             Console.WriteLine($"Type: Send"); // read from sql?
             Console.WriteLine($"Status: Approved");
             Console.WriteLine($"Amount: {transfer.amount}");
-            
+        }
 
     }
 }

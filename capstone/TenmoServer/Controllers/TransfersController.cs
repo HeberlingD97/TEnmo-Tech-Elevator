@@ -76,6 +76,7 @@ namespace TenmoServer.Controllers
             return Ok(); //come back to this, maybe, idk....
         }
 
+        ///referring to crazy sql method where we may or may not return to user
         //[HttpPut()]
         //public ActionResult UpdateBalanceForTransferAccounts(Transfer transfer)
         //{
