@@ -112,10 +112,13 @@ namespace TenmoClient
 
         private void GetBalance()
         {
-            decimal balance = tenmoApiService.GetBalance(user);
-            console.GetBalance(balance);
+            Account account = tenmoApiService.GetBalance(user);
+            console.GetBalance(account.Balance);
+            console.Pause();
             //Console.WriteLine(balance);
         }
+
+
 
 
 
