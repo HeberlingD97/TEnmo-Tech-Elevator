@@ -31,7 +31,7 @@ namespace TenmoServer.Controllers
         }
 
         // GET: TransfersController/Details/5
-        [HttpGet("{transferId}")]
+        [HttpGet("{transferId}")] // transfers/transfer id
         public ActionResult<Transfer> GetSpecificTransfer(User user, int transferId)
         {
             Transfer transfer = transferDao.GetSpecificTransfer(user, transferId);

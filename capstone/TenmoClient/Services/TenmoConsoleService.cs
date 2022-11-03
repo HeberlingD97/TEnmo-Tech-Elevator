@@ -80,7 +80,7 @@ namespace TenmoClient.Services
             Console.WriteLine("-----------------------------------------");
             Console.WriteLine("Please enter transfer ID to view details(0 to cancel): ");
         }
-        public void SendBucks()
+        public void SendBucks() // print
         {
 
             Console.WriteLine("");
@@ -97,8 +97,18 @@ namespace TenmoClient.Services
             //Enter amount to send: 75.74
         }
 
-
-
+        public void ViewSpecificTransfer()
+        {
+            Console.WriteLine("--------------------------------------------");
+            Console.WriteLine("Transfer Details");
+            Console.WriteLine("--------------------------------------------");
+            Console.WriteLine($"Id: {transfer.TransferId}");
+            Console.WriteLine($"From: {/*ApiUser Account ID*/}");
+            Console.WriteLine($"To: Me Myselfandi");
+            Console.WriteLine($"Type: Send"); // read from sql?
+            Console.WriteLine($"Status: Approved");
+            Console.WriteLine($"Amount: {transfer.amount}");
+            
 
     }
 }

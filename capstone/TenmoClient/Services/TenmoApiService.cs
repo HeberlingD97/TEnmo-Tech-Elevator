@@ -31,6 +31,17 @@ namespace TenmoClient.Services
             return response.Data;
 
         }
-        public List<ApiUser>
+
+        //public List<ApiUser>
+        //    {}
+
+        public Transfer ViewSpecificTransfer(ApiUser user, int transferId)
+        {
+            RestRequest request = new RestRequest($"/transfers/{transferId}/");
+            IRestResponse<Transfer> response = client.Get<Transfer>(request);
+
+            CheckForError(response);
+            return response.Data;
+        }
     }
 }
