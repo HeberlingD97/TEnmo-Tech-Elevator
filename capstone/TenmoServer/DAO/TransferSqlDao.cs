@@ -22,8 +22,8 @@ namespace TenmoServer.DAO
         //      I should be able to choose from a list of users to send TE Bucks to.
         public List<User> GetListOfUsers(User user)
         {
-            List<User> users = null; ;
-            {
+            List<User> users = null;
+            
                 try // try reading from SQL all data where we have given uder id
                 {
                     using (SqlConnection conn = new SqlConnection(connectionString))
@@ -36,7 +36,7 @@ namespace TenmoServer.DAO
 
                         while (reader.Read())
                         {
-                            User u = GetTransferFromReader(reader); // TODO: GetUserFromReader???
+                            User u = GetUserNamesFromReader(reader);
                             users.Add(u);
                         }
 
@@ -47,7 +47,7 @@ namespace TenmoServer.DAO
                     throw;
                 }
                 return users;
-            }
+            
         }
         //      A transfer should include the User IDs of the from and to users and the amount of TE Bucks.
 
@@ -207,6 +207,16 @@ namespace TenmoServer.DAO
             };
 
             return t;
+        }
+        private User GetUserNamesFromReader(SqlDataReader reader)
+        {
+            User u = new User()
+            {
+                UserId = Convert.ToInt32(reader["user_id"]),
+                Username = Convert.ToString(reader["username"]),
+            };
+
+            return u;
         }
     }
 }

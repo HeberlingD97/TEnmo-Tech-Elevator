@@ -62,24 +62,44 @@ namespace TenmoClient.Services
         {
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("Transfers");
-            Console.WriteLine("ID From/ To                 Amount");
+            Console.WriteLine("ID           From/ To                 Amount");
             Console.WriteLine("------------------------------------------");
-            Console.WriteLine("23          From: Bernice          $ 903.14");
-            Console.WriteLine("79          To: Larry           $  12.55");
+            
+            foreach(Transfer transfer in transfers)
+            {
+                if (transfer.AccountTo == //this specific user)
+                {
+                    Console.WriteLine($"{transfer.TransferId}          From: {//other user}          ${transfer.Amount}");
+
+                }
+                else if (transfer.AccountFrom == //sender)                  
+                {
+                    Console.WriteLine($"{transfer.TransferId}          To: {//other user}          ${transfer.Amount}");
+                }
+            }
             Console.WriteLine("-----------------------------------------");
             Console.WriteLine("Please enter transfer ID to view details(0 to cancel): ");
         }
+        public void SendBucks()
+        {
+
+            Console.WriteLine("");
+            Console.WriteLine("| --------------Users-------------- |");
+            Console.WriteLine("|    Id | Username                  |");
+            Console.WriteLine("| -------+---------------------------|");
+            
+            foreach ()
+
+            Console.WriteLine($"|  {} | Bernice                   |");
+            Console.WriteLine("|  1003 | Deandre                   |");
+            | -----------------------------------|
+            //Id of the user you are sending to[0]: 1003
+            //Enter amount to send: 75.74
+        }
+
+
+
 
     }
 }
 
-
-//Console.WriteLine("");
-//Console.WriteLine("| --------------Users-------------- |");
-//Console.WriteLine("|    Id | Username                  |");
-//Console.WriteLine("| -------+---------------------------|");
-//Console.WriteLine($"|  {} | Bernice                   |");
-//Console.WriteLine("|  1003 | Deandre                   |");
-//            | -----------------------------------|
-//            Id of the user you are sending to[0]: 1003
-//            Enter amount to send: 75.74
