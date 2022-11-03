@@ -10,8 +10,8 @@ namespace TenmoClient.Models
 
         // TODO: do we need to require any other fields? do we need descriptions for type & status?
         public int TransferId { get; set; }
-        public int TransferTypeId { get; set; }
-        public int TransferStatusId { get; set; }
+        public int TransferTypeId { get; set; } = 2;
+        public int TransferStatusId { get; set; } = 2;
         public int AccountFrom { get; set; }
         public int AccountTo { get; set; }
         [Range(0.01, 1000000000000, ErrorMessage = "User must transfer a positive amount.")] // TODO: also can't transfer more than what is in sender's account
