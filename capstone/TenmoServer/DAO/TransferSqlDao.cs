@@ -19,7 +19,7 @@ namespace TenmoServer.DAO
 
         // As an authenticated user of the system, I need to be able to send a transfer of a specific amount of TE Bucks to a registered user.
         //      I should be able to choose from a list of users to send TE Bucks to.
-        List<User> GetListOfUsers(User user)
+        public List<User> GetListOfUsers(User user)
         {
             List<User> users = null; ;
             {
@@ -72,7 +72,7 @@ namespace TenmoServer.DAO
             
         }
         //      The receiver's account balance is increased by the amount of the transfer.
-        public void UpdateBalanceForReceiveingAccount(Transfer transfer) /// posibly edit transfer
+        public void UpdateBalanceForTransferAccounts(Transfer transfer) /// posibly edit transfer
         {
             try // try reading from SQL all data where we have given uder id
             {
@@ -80,9 +80,21 @@ namespace TenmoServer.DAO
                 {
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("UPDATE account SET balance = 2 WHERE transfer_id = @transfer_id", conn);
-                    cmd.Parameters.AddWithValue("@transfer_id", transferId);
+                    SqlCommand cmd = new SqlCommand("BEGIN TRANSACTION; " +
+                                                         " UPDATE account  Set balance =" +
+                                                        " (SELECT balance FROM account JOIN transfer ON account_id = account_from WHERE transfer_id = @transfer_id)" +
+                                                        " - (SELECT amount FROM transfer JOIN account ON account.account_id = transfer.account_from" +
+                                                           " WHERE transfer_id = @transfer_id)" +
+                                                            " WHERE transfer_id = @transfer_id; " + 
+
+                                                            " UPDATE account  Set balance = " +
+                                                        " (SELECT balance FROM account JOIN transfer ON account_id = account_to WHERE transfer_id = @transfer_id)" +
+                                                        " + (SELECT amount FROM transfer JOIN account ON account.account_id = transfer.account_to" +
+                                                           " WHERE transfer_id = @transfer_id)" +
+                                                            " WHERE transfer_id = @transfer_id; " + "COMMIT", conn);
+                    cmd.Parameters.AddWithValue("@transfer_id", transfer.TransferId);
                     cmd.ExecuteNonQuery();
+                    // write line successful transfer
                 }
             }
             catch (SqlException)
@@ -91,7 +103,7 @@ namespace TenmoServer.DAO
             }
         }
         //      The sender's account balance is decreased by the amount of the transfer.
-        Transfer UpdateBalanceForSendingAccount();
+        
         //      I must not be allowed to send money to myself.
         //      I can't send more TE Bucks than I have in my account.
         //      I can't send a zero or negative amount.
