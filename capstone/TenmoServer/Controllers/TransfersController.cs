@@ -58,8 +58,6 @@ namespace TenmoServer.Controllers
             {
                 return Unauthorized("Please login to view your transfers.");
             }
-            
-
         }
 
         // Put: TransfersController/Edit/5
@@ -76,14 +74,27 @@ namespace TenmoServer.Controllers
             return Ok(); //come back to this, maybe, idk....
         }
 
-        //[HttpPut()]
-        //public ActionResult UpdateBalanceForTransferAccounts(Transfer transfer)
-        //{
-            
-            
-        //    transferDao.UpdateSendingTransferStatus(transferId);
-        //    return Ok();
-        //}
+        [HttpPut()]
+        public ActionResult UpdateBalanceForTransferAccounts(Transfer transfer)
+        {
+
+
+            transferDao.UpdateSendingTransferStatus(transferId);
+            return Ok();
+        }
+
+        [HttpGet()]
+        public ActionResult<List<User>> GetListOfUsers(User user)
+        {
+            if (User.Identity.Name != null)
+            {
+                return transferDao.
+            }
+            else
+            {
+                return Unauthorized("Please login to view your transfers.");
+            }
+        }
 
 
     }
