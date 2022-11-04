@@ -80,21 +80,20 @@ namespace TenmoClient.Services
             Console.WriteLine("Please enter transfer ID to view details(0 to cancel): ");
         }
 
-        public void SendBucks() // print
+        public void SendBucks(List<Transfer> transfers, int transferId, ApiUser user, decimal amount) // print
         {
 
             Console.WriteLine("");
             Console.WriteLine("| --------------Users-------------- |");
             Console.WriteLine("|    Id | Username                  |");
             Console.WriteLine("| -------+---------------------------|");
-
-            foreach ()
-
-                Console.WriteLine($"|  {} | Bernice                   |");
-            Console.WriteLine("|  1003 | Deandre                   |");
-            | -----------------------------------|
-            //Id of the user you are sending to[0]: 1003
-            //Enter amount to send: 75.74
+            foreach (Transfer fransfer in transfers)
+                {
+                Console.WriteLine($"|  {transferId} | {user.Username}  |");
+                }   
+            Console.WriteLine("| -----------------------------------|");
+            Console.WriteLine($"Sending TE Bucks to {user.Username}");
+            Console.WriteLine($"Amount sending: {amount}");
         }
 
         public void ViewSpecificTransfer()
