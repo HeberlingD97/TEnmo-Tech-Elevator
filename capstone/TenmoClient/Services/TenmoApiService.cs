@@ -10,8 +10,6 @@ namespace TenmoClient.Services
 
         public TenmoApiService(string apiUrl) : base(apiUrl) { }
 
-        // Add methods to call api here...
-        // 3. As an authenticated user of the system, I need to be able to see my Account Balance.
         public Account GetBalance(ApiUser user)
         {
             RestRequest request = new RestRequest($"/accounts/{user.UserId}");
@@ -31,9 +29,6 @@ namespace TenmoClient.Services
             return response.Data;
 
         }
-
-        //public List<ApiUser>
-        //    {}
 
         public Transfer ViewSpecificTransfer(ApiUser user, int transferId)
         {
