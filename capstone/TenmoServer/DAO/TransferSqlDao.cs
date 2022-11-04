@@ -62,7 +62,7 @@ namespace TenmoServer.DAO
                     {
                         conn.Open();
 
-                        SqlCommand cmd = new SqlCommand("SELECT amount, user_id FROM transfer JOIN account ON account_id IN (account_from, account_to) WHERE user_id = @user_id", conn);
+                        SqlCommand cmd = new SqlCommand("SELECT transfer_id, user_id, amount FROM transfer JOIN account ON account_id IN (account_from, account_to) WHERE user_id = @user_id", conn);
                         cmd.Parameters.AddWithValue("@user_id", user.UserId);
                         SqlDataReader reader = cmd.ExecuteReader();
 
@@ -117,7 +117,7 @@ namespace TenmoServer.DAO
             {
                 conn.Open();
 
-                SqlCommand cmd = new SqlCommand("INSERT INTO transfer (transfer_status_id, transfer_type_id, acccount_to, account_from, amount) " +
+                SqlCommand cmd = new SqlCommand("INSERT INTO transfer (transfer_status_id, transfer_type_id, account_to, account_from, amount) " +
                                                 "OUTPUT INSERTED.transfer_id " +
                                                 "VALUES (@transfer_status_id, @transfer_type_id, @acccount_to, @account_from, @amount);", conn);
                 cmd.Parameters.AddWithValue("@transfer_status_id", transfer.TransferStatusId);
@@ -132,26 +132,7 @@ namespace TenmoServer.DAO
         }
 
         //      A Sending Transfer has an initial status of Approved.
-        //public void UpdateSendingTransferStatus(int transferId) // possibly come back to this
-        //{
-            
-        //    try // try reading from SQL all data where we have given uder id
-        //    {
-        //        using (SqlConnection conn = new SqlConnection(connectionString))
-        //        {
-        //            conn.Open();
 
-        //            SqlCommand cmd = new SqlCommand("UPDATE transfer SET transfer_status_id = 2 WHERE transfer_id = @transfer_id", conn);
-        //            cmd.Parameters.AddWithValue("@transfer_id", transferId);
-        //            cmd.ExecuteNonQuery();          
-        //        }
-        //    }
-        //    catch (SqlException)
-        //    {
-        //        throw;
-        //    }
-            
-        //}
         //      The receiver's account balance is increased by the amount of the transfer.
         public bool UpdateBalanceForTransferAccounts(Transfer transfer) // possibly edit transfer
         {
@@ -160,21 +141,42 @@ namespace TenmoServer.DAO
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
+                    decimal balanceFrom = 0;
+                    decimal balanceTo = 0;
+                    decimal newBalanceFrom = 0;
+                    decimal newBalanceTo = 0;
+                    SqlCommand cmdForAccountFromBalance = new SqlCommand("SELECT balance FROM account JOIN transfer ON " +
+                        "account_id = account_from WHERE transfer_id = @transfer_id;", conn);
+                    cmdForAccountFromBalance.Parameters.AddWithValue("@transfer_id", transfer.TransferId);
+                    SqlDataReader readerFrom = cmdForAccountFromBalance.ExecuteReader();
+                    if (readerFrom.Read()) // should only read 1 row of table
+                    {
+                        balanceFrom = GetBalanceFromReader(readerFrom);
+                        newBalanceFrom = balanceFrom - transfer.Amount;
+                    }
 
-                    SqlCommand cmd = new SqlCommand("BEGIN TRANSACTION; " +
-                                                         " UPDATE account  Set balance =" +
-                                                        " (SELECT balance FROM account JOIN transfer ON account_id = account_from WHERE transfer_id = @transfer_id)" +
-                                                        " - (SELECT amount FROM transfer JOIN account ON account.account_id = transfer.account_from" +
-                                                           " WHERE transfer_id = @transfer_id)" +
-                                                            " WHERE transfer_id = @transfer_id; " + 
+                    SqlCommand cmdForAccountToBalance = new SqlCommand("SELECT balance FROM account JOIN transfer ON account_id = account_to WHERE transfer_id = @transfer_id;", conn);
+                    cmdForAccountToBalance.Parameters.AddWithValue("@transfer_id", transfer.TransferId);
+                    SqlDataReader readerTo = cmdForAccountFromBalance.ExecuteReader();
+                    if (readerTo.Read()) // should only read 1 row of table
+                    {
+                        balanceTo = GetBalanceFromReader(readerTo);
+                        newBalanceTo = balanceTo + transfer.Amount;
+                    }
 
-                                                            " UPDATE account  Set balance = " +
-                                                        " (SELECT balance FROM account JOIN transfer ON account_id = account_to WHERE transfer_id = @transfer_id)" +
-                                                        " + (SELECT amount FROM transfer JOIN account ON account.account_id = transfer.account_to" +
-                                                           " WHERE transfer_id = @transfer_id)" +
-                                                            " WHERE transfer_id = @transfer_id; " + "COMMIT", conn);
-                    cmd.Parameters.AddWithValue("@transfer_id", transfer.TransferId);
-                    cmd.ExecuteNonQuery();
+
+                    SqlCommand cmdForTransfer = new SqlCommand("BEGIN TRANSACTION; " +
+                                                                " UPDATE account SET balance = @balance_from " +
+                                                                "WHERE account_id = @account_from; " +
+                                                                "UPDATE account SET balance = @balance_to " +
+                                                                "WHERE account_id = @account_to; " +
+                                                                "COMMIT;", conn);
+                    cmdForTransfer.Parameters.AddWithValue("@balance_from", newBalanceFrom);
+                    cmdForTransfer.Parameters.AddWithValue("@balance_to", newBalanceTo);
+                    cmdForTransfer.Parameters.AddWithValue("@account_from", transfer.AccountFrom);
+                    cmdForTransfer.Parameters.AddWithValue("@account_to", transfer.AccountTo);
+                    cmdForTransfer.ExecuteNonQuery();
+
                     // write line successful transfer
                     return true;
                 }
@@ -190,11 +192,6 @@ namespace TenmoServer.DAO
         //      I can't send more TE Bucks than I have in my account.
         //      I can't send a zero or negative amount.
         
-
-
-
-
-
         private Transfer GetTransferFromReader(SqlDataReader reader) // privately build POCO based on sql row
         {
             Transfer t = new Transfer()
@@ -218,6 +215,11 @@ namespace TenmoServer.DAO
             };
 
             return u;
+        }
+
+        private decimal GetBalanceFromReader(SqlDataReader reader) // privately build POCO based on sql row
+        {
+            return Convert.ToDecimal(reader["balance"]); // decimal balance
         }
     }
 }
