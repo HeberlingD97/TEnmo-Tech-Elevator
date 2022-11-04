@@ -97,18 +97,18 @@ namespace TenmoClient.Services
             Console.WriteLine($"Amount sending: {amount}");
         }
 
-        public void ViewSpecificTransfer()
-        {
-            Console.WriteLine("--------------------------------------------");
-            Console.WriteLine("Transfer Details");
-            Console.WriteLine("--------------------------------------------");
-            Console.WriteLine($"Id: {transfer.TransferId}");
-            Console.WriteLine($"From: {/*ApiUser Account ID*/}");
-            Console.WriteLine($"To: Me Myselfandi");
-            Console.WriteLine($"Type: Send"); // read from sql?
-            Console.WriteLine($"Status: Approved");
-            Console.WriteLine($"Amount: {transfer.amount}");
-        }
+        //public void ViewSpecificTransfer()
+        //{
+        //    Console.WriteLine("--------------------------------------------");
+        //    Console.WriteLine("Transfer Details");
+        //    Console.WriteLine("--------------------------------------------");
+        //    Console.WriteLine($"Id: {transfer.TransferId}");
+        //    Console.WriteLine($"From: {/*ApiUser Account ID*/}");
+        //    Console.WriteLine($"To: Me Myselfandi");
+        //    Console.WriteLine($"Type: Send"); // read from sql?
+        //    Console.WriteLine($"Status: Approved");
+        //    Console.WriteLine($"Amount: {transfer.amount}");
+        //}
 
     }
 }

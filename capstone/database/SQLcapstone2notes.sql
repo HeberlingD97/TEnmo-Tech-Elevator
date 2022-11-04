@@ -24,3 +24,52 @@
 --As an authenticated user of the system, I need to be able to retrieve the details of any transfer based upon the transfer ID.
 	-- [HttpGet("transfers/{transferId}")]
 	-- SELECT * FROM transfer WHERE transfer_id = @transfer_id;
+	SELECT * FROM tenmo_user;
+	SELECT * FROM account;
+	SELECT * FROM transfer;
+	SELECT * FROM transfer_type;
+	INSERT INTO transfer (transfer_status_id, transfer_type_id, account_from, account_to, amount)
+	OUTPUT inserted.transfer_id
+	VALUES (2, 2, 2001, 2002, 10.00);
+
+	BEGIN TRANSACTION;
+    UPDATE account SET balance = ((SELECT balance FROM account JOIN transfer ON account_id = account_from WHERE transfer_id = 3002)
+	- (SELECT amount FROM transfer JOIN account ON account.account_id = transfer.account_from WHERE transfer_id = 3002)) WHERE user_id = 2001;
+	UPDATE account SET balance = (SELECT balance FROM account JOIN transfer ON account_id = account_to WHERE transfer_id = 3002)
+	+ (SELECT amount FROM transfer JOIN account ON account.account_id = transfer.account_to WHERE transfer_id = 3002);
+    COMMIT;
+
+	SELECT balance FROM account JOIN transfer ON account_id = 2001 WHERE transfer_id = 3001
+	SELECT balance FROM account JOIN transfer ON account_id = 2002 WHERE transfer_id = 3001
+
+	BEGIN TRANSACTION;
+UPDATE account SET balance = 989.5 WHERE account_id = 2001;
+
+UPDATE account SET balance = 1010.5 WHERE account_id = 2002; 
+COMMIT;
+
+INSERT INTO transfer (transfer_status_id, transfer_type_id, account_to, account_from, amount)
+OUTPUT INSERTED.transfer_id 
+VALUES (2, 2, 2002, 2001, 20);
+
+SELECT * FROM transfer WHERE transfer_id = 3001;
+SELECT * FROM transfer 
+JOIN account ON account.account_id IN (account_from, account_to)  -- or creates double (union statement)
+JOIN tenmo_user ON account.user_id = tenmo_user.user_id 
+
+
+SELECT transfer_id, amount FROM transfer
+JOIN account ON account.account_id = account_from OR account.account_id = account_to
+JOIN tenmo_user ON account.user_id = tenmo_user.user_id 
+WHERE username = 'test'
+UNION
+SELECT username FROM tenmo_user
+JOIN account ON account.user_id = tenmo_user.user_id 
+JOIN transfer ON account.account_id = account_from
+WHERE account_from != account_id & ;
+
+transfer id
+to/from
+amount
+
+

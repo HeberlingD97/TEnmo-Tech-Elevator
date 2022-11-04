@@ -83,7 +83,7 @@ namespace TenmoClient
             if (menuSelection == 2)
             {
                 // View your past transfers
-                ViewPastTransfers();
+                //ViewPastTransfers();
             }
 
             if (menuSelection == 3)
@@ -94,7 +94,7 @@ namespace TenmoClient
             if (menuSelection == 4)
             {
                 // Send TE bucks
-                SendBucks();
+                //SendBucks();
             }
 
             if (menuSelection == 5)
