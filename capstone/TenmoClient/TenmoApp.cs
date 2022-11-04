@@ -83,7 +83,7 @@ namespace TenmoClient
             if (menuSelection == 2)
             {
                 // View your past transfers
-                ViewPastTransfers();
+                //ViewPastTransfers();
             }
 
             if (menuSelection == 3)
@@ -94,7 +94,7 @@ namespace TenmoClient
             if (menuSelection == 4)
             {
                 // Send TE bucks
-                SendBucks();
+                //SendBucks();
             }
 
             if (menuSelection == 5)
@@ -120,25 +120,25 @@ namespace TenmoClient
             //Console.WriteLine(balance);
         }
 
-        private void ViewPastTransfers()
-        {
-            List<Transfer> transfers = new List<Transfer>();
-            transfers = tenmoApiService.ViewPastTransfers(user);
-            console.ViewPastTransfers(user);    //Invesigate
-            console.Pause();
-            // would you like to view specific transfer? 
-            // readline?
-            // tenmoapiservice view specific transfer
-        }
+        //private void ViewPastTransfers()
+        //{
+        //    List<Transfer> transfers = new List<Transfer>();
+        //    transfers = tenmoApiService.ViewPastTransfers(user);
+        //    console.ViewPastTransfers(user);    //Invesigate
+        //    console.Pause();
+        //    // would you like to view specific transfer? 
+        //    // readline?
+        //    // tenmoapiservice view specific transfer
+        //}
 
-        private void SendBucks()
-        {
-            List<ApiUser> users = new List<ApiUser>();
-            users = tenmoApiService.GetUsers(user);
-            console.GetUsers();
-            console.Pause();
-            
-        }
+        //private void SendBucks()
+        //{
+        //    List<ApiUser> users = new List<ApiUser>();
+        //    users = tenmoApiService.GetUsers(user);
+        //    console.GetUsers();
+        //    console.Pause();
+
+        //}
 
 
 

@@ -14,7 +14,7 @@ namespace TenmoServer.DAO
         //      A transfer should include the User IDs of the from and to users and the amount of TE Bucks.
         public Transfer CreateTransfer(User user, Transfer transfer);
         //      A Sending Transfer has an initial status of Approved.
-        public void UpdateSendingTransferStatus(int transferId);
+        //public void UpdateSendingTransferStatus(int transferId);
         //      The receiver's account balance is increased by the amount of the transfer.
         public bool UpdateBalanceForTransferAccounts(Transfer transfer);
         //      The sender's account balance is decreased by the amount of the transfer.
