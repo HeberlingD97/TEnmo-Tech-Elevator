@@ -24,7 +24,7 @@ namespace TenmoClient.Services
 
         public List<Transfer> ViewPastTransfers(ApiUser user)
         {
-            RestRequest request = new RestRequest($"/transfers/{user.UserId}");
+            RestRequest request = new RestRequest($"{user.UserId}/transferList");
             IRestResponse<List<Transfer>> response = client.Get<List<Transfer>>(request);
 
             CheckForError(response);
