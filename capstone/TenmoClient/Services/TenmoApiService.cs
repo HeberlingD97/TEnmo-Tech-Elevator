@@ -43,5 +43,32 @@ namespace TenmoClient.Services
             CheckForError(response);
             return response.Data;
         }
+
+        public Transfer CreateTransfer(Transfer newTransfer)
+        {
+            RestRequest req = new RestRequest("transfers");
+            req.AddJsonBody(newTransfer);
+            IRestResponse<Transfer> response = client.Post<Transfer>(req);
+            CheckForError(response);
+            return response.Data;
+        }
+        public List<ApiUser> GetListOfUsers()
+        {
+            RestRequest req = new RestRequest("transfers");
+            IRestResponse<List<ApiUser>> response = client.Get<List<ApiUser>>(req);
+            CheckForError(response);
+            return response.Data;
+
+        }
+
+        public Transfer UpdateBalanceForTransferAccounts(Transfer updatingTransfer)
+        {
+            RestRequest req = new RestRequest($"transfer/{updatingTransfer.TransferId}");
+            req.AddJsonBody(updatingTransfer);
+            IRestResponse<Transfer> response = client.Put<Transfer>(req);
+            CheckForError(response);
+            return response.Data;
+
+        }
     }
 }
