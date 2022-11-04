@@ -9,5 +9,20 @@
         public string Username { get; set; }
         public string Token { get; set; }
         public string Message { get; set; }
+
+        public ApiUser() { }
+
+        public ApiUser(int userId, string username, string token, string message)
+        {
+            this.UserId = userId;
+            this.Username = username;
+            this.Token = token;
+            this.Message = message;
+
+        }
     }
+
+    
+
+
 }

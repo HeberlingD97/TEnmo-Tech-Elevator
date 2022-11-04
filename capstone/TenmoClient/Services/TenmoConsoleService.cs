@@ -58,30 +58,31 @@ namespace TenmoClient.Services
             Console.WriteLine($"Your current account balance is: ${balance}");
         }
 
-        //public void ViewPastTransfers()
-        //{
-        //    Console.WriteLine("-------------------------------------------");
-        //    Console.WriteLine("Transfers");
-        //    Console.WriteLine("ID           From/ To                 Amount");
-        //    Console.WriteLine("------------------------------------------");
+        public void ViewPastTransfers(List<Transfer> transfers, int transferID, ApiUser user)
+        {
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("Transfers");
+            Console.WriteLine("ID           From/ To                 Amount");
+            Console.WriteLine("------------------------------------------");
 
-        //    foreach (Transfer transfer in transfers)
-        //    {
-        //        if (transfer.AccountTo == //this specific user)
-        //        {
-        //            Console.WriteLine($"{transfer.TransferId}          From: {//other user}          ${transfer.Amount}");
+            foreach (Transfer transfer in transfers) // Get list of users to call for the username
+            {
+                if (transfers.Count > 0 )
+                {
+                    Console.WriteLine($"{transfer.TransferId}          From: {user.Username}          ${transfer.Amount}");
+                    Console.WriteLine($"{transfer.TransferId}          To: {user.Username}              ${transfer.Amount}");
+                }
+                else if (transfers.Count <= 0)                  
+                {
+                    Console.WriteLine("There are no transfers for this ID: " + transferID);
+                }
+            }
+            Console.WriteLine("-----------------------------------------");
+            Console.WriteLine("Please enter transfer ID to view details(0 to cancel): ");
+        }
 
-        //        }
-        //        else if (transfer.AccountFrom == //sender)                  
-        //        {
-        //            Console.WriteLine($"{transfer.TransferId}          To: {//other user}          ${transfer.Amount}");
-        //        }
-        //    }
-        //    Console.WriteLine("-----------------------------------------");
-        //    Console.WriteLine("Please enter transfer ID to view details(0 to cancel): ");
-        //}
-        //public void SendBucks() // print
-        //{
+        public void SendBucks() // print
+        {
 
         //    Console.WriteLine("");
         //    Console.WriteLine("| --------------Users-------------- |");
