@@ -55,36 +55,6 @@ namespace TenmoServer.DAO
         public List<Transfer> GetTransfers(User user)
         {
             List<Transfer> transfers = null;
-            {
-                try // try reading from SQL all data where we have given uder id
-                {
-                    using (SqlConnection conn = new SqlConnection(connectionString))
-                    {
-                        conn.Open();
-
-                        SqlCommand cmd = new SqlCommand("SELECT transfer_id, user_id, amount FROM transfer JOIN account ON account_id IN (account_from, account_to) WHERE user_id = @user_id", conn);
-                        cmd.Parameters.AddWithValue("@user_id", user.UserId);
-                        SqlDataReader reader = cmd.ExecuteReader();
-
-                        while (reader.Read())
-                        {
-                            Transfer t = GetTransferFromReader(reader);
-                            transfers.Add(t);
-                        }
-
-                    }
-                }
-                catch (SqlException)
-                {
-                    throw;
-                }
-                return transfers;
-            }
-        }
-        // As an authenticated user of the system, I need to be able to retrieve the details of any transfer based upon the transfer ID.
-        public Transfer GetSpecificTransfer(User user, int transferId)
-        {
-            Transfer returnTransfer = null; // set up initial account
 
             try // try reading from SQL all data where we have given uder id
             {
@@ -92,7 +62,41 @@ namespace TenmoServer.DAO
                 {
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("SELECT * FROM transfer WHERE transfer_id = @transfer_id", conn);
+                    SqlCommand cmd = new SqlCommand("SELECT transfer_id, user_id, amount FROM transfer JOIN account ON account_id IN (account_from, account_to) WHERE user_id = @user_id;", conn);
+                    cmd.Parameters.AddWithValue("@user_id", user.UserId);
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        Transfer t = GetTransferFromReader(reader);
+                        transfers.Add(t);
+                    }
+
+                }
+            }
+            catch (SqlException)
+            {
+                throw;
+            }
+            return transfers;
+
+        }
+        // As an authenticated user of the system, I need to be able to retrieve the details of any transfer based upon the transfer ID.
+        public Transfer GetSpecificTransfer(User user, int transferId)
+        {
+            Transfer returnTransfer = null; // set up initial account
+            if (user == null)
+            {
+                return null;
+            }
+
+            try // try reading from SQL all data where we have given uder id
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand("SELECT * FROM transfer WHERE transfer_id = @transfer_id;", conn);
                     cmd.Parameters.AddWithValue("@transfer_id", transferId);
                     SqlDataReader reader = cmd.ExecuteReader();
 
