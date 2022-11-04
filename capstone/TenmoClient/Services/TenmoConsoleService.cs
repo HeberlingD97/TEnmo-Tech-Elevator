@@ -58,7 +58,7 @@ namespace TenmoClient.Services
             Console.WriteLine($"Your current account balance is: ${balance}");
         }
 
-        public void ViewPastTransfers(List<Transfer> transfers, int transferID, int accountFrom, int accountTo, List<ApiUser> users)
+        public void ViewPastTransfers(List<Transfer> transfers, int transferID, ApiUser user)
         {
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("Transfers");
@@ -69,8 +69,8 @@ namespace TenmoClient.Services
             {
                 if (transfers.Count > 0 )
                 {
-                    Console.WriteLine($"{transfer.TransferId}          From: {accountFrom}          ${transfer.Amount}");
-                    Console.WriteLine($"{transfer.TransferId}          To: {accountTo}              ${transfer.Amount}");
+                    Console.WriteLine($"{transfer.TransferId}          From: {user.Username}          ${transfer.Amount}");
+                    Console.WriteLine($"{transfer.TransferId}          To: {user.Username}              ${transfer.Amount}");
                 }
                 else if (transfers.Count <= 0)                  
                 {
