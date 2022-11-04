@@ -60,6 +60,7 @@ namespace TenmoClient.Services
 
         public void ViewPastTransfers(List<Transfer> transfers, int transferID, ApiUser user)
         {
+            List<Transfer> tranfers = new List<Transfer>();
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("Transfers");
             Console.WriteLine("ID           From/ To                 Amount");

@@ -59,20 +59,6 @@ namespace TenmoServer.Controllers
             }
         }
 
-        //Put: TransfersController/Edit/5
-        //[HttpPut("{transferId}")]
-        //public ActionResult UpdateSendingTransferStatus(User user, int transferId) // setting default status & type in model instead of doing this method!!!
-        //{
-        //    Transfer existingTransfer = transferDao.GetSpecificTransfer(user, transferId);
-        //    if (existingTransfer == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    transferDao.UpdateSendingTransferStatus(transferId);
-        //    return Ok(); //come back to this, maybe, idk....
-        //}
-
         [HttpPut("updateBalances")]
         public ActionResult<bool> UpdateBalanceForTransferAccounts(Transfer transfer)
         {
