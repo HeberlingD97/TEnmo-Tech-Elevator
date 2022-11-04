@@ -64,8 +64,8 @@ namespace TenmoClient.Services
             Console.WriteLine("Transfers");
             Console.WriteLine("ID           From/ To                 Amount");
             Console.WriteLine("------------------------------------------");
-            
-            foreach(Transfer transfer in transfers)
+
+            foreach (Transfer transfer in transfers)
             {
                 if (transfer.AccountTo == //this specific user)
                 {
@@ -87,10 +87,10 @@ namespace TenmoClient.Services
             Console.WriteLine("| --------------Users-------------- |");
             Console.WriteLine("|    Id | Username                  |");
             Console.WriteLine("| -------+---------------------------|");
-            
+
             foreach ()
 
-            Console.WriteLine($"|  {} | Bernice                   |");
+                Console.WriteLine($"|  {} | Bernice                   |");
             Console.WriteLine("|  1003 | Deandre                   |");
             | -----------------------------------|
             //Id of the user you are sending to[0]: 1003

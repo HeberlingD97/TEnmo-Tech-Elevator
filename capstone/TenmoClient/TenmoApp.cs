@@ -137,7 +137,7 @@ namespace TenmoClient
             users = tenmoApiService.GetUsers(user);
             console.GetUsers();
             console.Pause();
-            
+
         }
 
 
