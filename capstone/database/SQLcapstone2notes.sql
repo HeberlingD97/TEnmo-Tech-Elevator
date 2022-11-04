@@ -66,7 +66,8 @@ UNION
 SELECT username FROM tenmo_user
 JOIN account ON account.user_id = tenmo_user.user_id 
 JOIN transfer ON account.account_id = account_from
-WHERE account_from != account_id & ;
+WHERE account_from != account_id & 
+ORDER BY transfer_id;
 
 transfer id
 to/from
