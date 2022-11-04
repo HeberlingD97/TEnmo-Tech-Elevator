@@ -12,7 +12,7 @@ namespace TenmoServer.DAO
         //      I should be able to choose from a list of users to send TE Bucks to.
         public List<User> GetListOfUsers(User user);
         //      A transfer should include the User IDs of the from and to users and the amount of TE Bucks.
-        //public Transfer CreateTransfer(User user, Transfer transfer);
+        public Transfer CreateTransfer(User user, Transfer transfer);
         //      A Sending Transfer has an initial status of Approved.
         //public void UpdateSendingTransferStatus(int transferId);
         //      The receiver's account balance is increased by the amount of the transfer.

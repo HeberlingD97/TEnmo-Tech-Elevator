@@ -11,7 +11,6 @@ namespace TenmoServer.DAO
     public class TransferSqlDao : ITransferDao
     {
         private readonly string connectionString;
-        const decimal startingBalance = 1000;
 
         public TransferSqlDao(string dbConnectionString)
         {
@@ -52,7 +51,7 @@ namespace TenmoServer.DAO
         //      A transfer should include the User IDs of the from and to users and the amount of TE Bucks.
 
         // As an authenticated user of the system, I need to be able to see transfers I have sent or received.
-        public List<Transfer> GetTransfers(User user)
+        public List<Transfer> GetTransfers(User user) //kim
         {
             List<Transfer> transfers = null;
 

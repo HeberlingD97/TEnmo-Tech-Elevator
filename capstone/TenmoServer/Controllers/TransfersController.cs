@@ -12,7 +12,7 @@ namespace TenmoServer.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class TransfersController : ControllerBase
     {
         private readonly ITransferDao transferDao; // have private variable to represent dao object
@@ -22,16 +22,16 @@ namespace TenmoServer.Controllers
             this.transferDao = transferDao;
         }
 
-        ////POST: TransfersController/Create
-        //[HttpPost("{user.UserId}")] // TODO: how to make endpoints work? throwing exception that this route is implemented multiple times???
-        //public ActionResult<Transfer> CreateTransfer(User user, Transfer transfer)
-        //{
-        //    Transfer createdTransfer = transferDao.CreateTransfer(user, transfer);
-        //    return Created($"/transfers/{user.UserId}/{createdTransfer.TransferId}", createdTransfer);
-        //}
+        //POST: TransfersController/Create
+        [HttpPost("{UserId}")] // TODO: how to make endpoints work? throwing exception that this route is implemented multiple times???
+        public ActionResult<Transfer> CreateTransfer(User user, Transfer transfer) // can only pass in 1 parameter?
+        {
+            Transfer createdTransfer = transferDao.CreateTransfer(user, transfer);
+            return Created($"/transfers/{user.UserId}/{createdTransfer.TransferId}", createdTransfer);
+        }
 
         // GET: TransfersController/Details/5
-        [HttpGet("{user.UserId}/{transferId}")] // transfers/userid/transfer id
+        [HttpGet("{UserId}/{transferId}")] // transfers/userid/transfer id
         public ActionResult<Transfer> GetSpecificTransfer(User user, int transferId)
         {
             Transfer transfer = transferDao.GetSpecificTransfer(user, transferId);
@@ -44,22 +44,22 @@ namespace TenmoServer.Controllers
                 return NotFound();
             }
         }
-    
-        // GET: TransfersController
-        //[HttpGet("{user.UserId}/transferList")] //possibly use user url
-        //public ActionResult<List<Transfer>> GetTransfers(User user) // status code 500
-        //{
-        //    if (User.Identity.Name != null)
-        //    {
-        //        return transferDao.GetTransfers(user);
-        //    }
-        //    else
-        //    {
-        //        return Unauthorized("Please login to view your transfers.");
-        //    }
-        //}
 
-        [HttpPut("updateBalances")]
+        //GET: TransfersController
+        [HttpGet("{UserId}/transferList")] //possibly use user url
+        public ActionResult<List<Transfer>> GetTransfers(User user) // status code 500
+        {
+            if (User.Identity.Name != null)
+            {
+                return transferDao.GetTransfers(user);
+            }
+            else
+            {
+                return Unauthorized("Please login to view your transfers.");
+            }
+        }
+
+        [HttpPut("perform/{transfer}")]
         public ActionResult<bool> UpdateBalanceForTransferAccounts(Transfer transfer)
         {
             bool result = transferDao.UpdateBalanceForTransferAccounts(transfer);
@@ -72,20 +72,20 @@ namespace TenmoServer.Controllers
                 return StatusCode(500);
             }
             
-        //}
+        }
 
-        //[HttpGet("userList")] //users to transfer to
-        //public ActionResult<List<User>> GetListOfUsers(User user)
-        //{
-        //    if (User.Identity.Name != null)
-        //    {
-        //        return transferDao.GetListOfUsers(user);
-        //    }
-        //    else
-        //    {
-        //        return Unauthorized("Please login to view your transfers.");
-        //    }
-        //}
+        [HttpGet("{UserId}/userList")] //users to transfer to
+        public ActionResult<List<User>> GetListOfUsers(User user)
+        {
+            if (User.Identity.IsAuthenticated == true)
+            {
+                return transferDao.GetListOfUsers(user);
+            }
+            else
+            {
+                return Unauthorized("Please login to view your transfers.");
+            }
+        }
 
 
     }
