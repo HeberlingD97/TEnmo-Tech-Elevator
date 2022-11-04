@@ -84,32 +84,32 @@ namespace TenmoClient.Services
         public void SendBucks() // print
         {
 
-        //    Console.WriteLine("");
-        //    Console.WriteLine("| --------------Users-------------- |");
-        //    Console.WriteLine("|    Id | Username                  |");
-        //    Console.WriteLine("| -------+---------------------------|");
+            Console.WriteLine("");
+            Console.WriteLine("| --------------Users-------------- |");
+            Console.WriteLine("|    Id | Username                  |");
+            Console.WriteLine("| -------+---------------------------|");
 
-        //    foreach ()
+            foreach ()
 
-        //        Console.WriteLine($"|  {} | Bernice                   |");
-        //    Console.WriteLine("|  1003 | Deandre                   |");
-        //    | -----------------------------------|
-        //    //Id of the user you are sending to[0]: 1003
-        //    //Enter amount to send: 75.74
-        //}
+                Console.WriteLine($"|  {} | Bernice                   |");
+            Console.WriteLine("|  1003 | Deandre                   |");
+            | -----------------------------------|
+            //Id of the user you are sending to[0]: 1003
+            //Enter amount to send: 75.74
+        }
 
-        //public void ViewSpecificTransfer()
-        //{
-        //    Console.WriteLine("--------------------------------------------");
-        //    Console.WriteLine("Transfer Details");
-        //    Console.WriteLine("--------------------------------------------");
-        //    Console.WriteLine($"Id: {transfer.TransferId}");
-        //    Console.WriteLine($"From: {/*ApiUser Account ID*/}");
-        //    Console.WriteLine($"To: Me Myselfandi");
-        //    Console.WriteLine($"Type: Send"); // read from sql?
-        //    Console.WriteLine($"Status: Approved");
-        //    Console.WriteLine($"Amount: {transfer.amount}");
-        //}
+        public void ViewSpecificTransfer()
+        {
+            Console.WriteLine("--------------------------------------------");
+            Console.WriteLine("Transfer Details");
+            Console.WriteLine("--------------------------------------------");
+            Console.WriteLine($"Id: {transfer.TransferId}");
+            Console.WriteLine($"From: {/*ApiUser Account ID*/}");
+            Console.WriteLine($"To: Me Myselfandi");
+            Console.WriteLine($"Type: Send"); // read from sql?
+            Console.WriteLine($"Status: Approved");
+            Console.WriteLine($"Amount: {transfer.amount}");
+        }
 
     }
 }
