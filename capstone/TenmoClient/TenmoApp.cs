@@ -123,8 +123,8 @@ namespace TenmoClient
         private void ViewPastTransfers()
         {
             List<Transfer> transfers = new List<Transfer>();
-            transfers = tenmoApiService.ViewPastTransfers(user);
-            console.ViewPastTransfers(user);    //Invesigate
+            tenmoApiService.ViewPastTransfers(user);
+            console.ViewPastTransfers(transfers);    //Invesigate
             console.Pause();
             // would you like to view specific transfer? 
             // readline?
