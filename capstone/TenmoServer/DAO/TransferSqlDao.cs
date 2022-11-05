@@ -11,7 +11,6 @@ namespace TenmoServer.DAO
     public class TransferSqlDao : ITransferDao
     {
         private readonly string connectionString;
-        const decimal startingBalance = 1000;
 
         public TransferSqlDao(string dbConnectionString)
         {
