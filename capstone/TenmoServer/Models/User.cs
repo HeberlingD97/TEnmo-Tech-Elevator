@@ -28,4 +28,16 @@
         public string Username { get; set; }
         public string Password { get; set; }
     }
+
+    public class TransferRecipient// made this to solve front end discrep.
+    {
+        public TransferRecipient(int userId, string username)
+        {
+            UserId = userId;
+            Username = username;
+        }
+
+        public int UserId { get; }
+        public string Username { get; }
+    }
 }

@@ -26,7 +26,7 @@ namespace TenmoServer.Controllers
         [HttpGet("{userId}")]
         public ActionResult<Account> GetBalance(int userId)
         {
-            Account specificAccount = accountDao.GetBalance(userId); // TODO: get balance for specific id, do we need to use token from return-user model to find user id?
+            Account specificAccount = accountDao.GetAccount(userId); // TODO: get balance for specific id, do we need to use token from return-user model to find user id?
             if (specificAccount != null)
             {
                 return specificAccount;

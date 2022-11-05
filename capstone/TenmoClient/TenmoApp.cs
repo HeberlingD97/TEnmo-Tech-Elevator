@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TenmoClient.Models;
 using TenmoClient.Services;
+using System.Linq;
 
 
 namespace TenmoClient
@@ -94,7 +95,7 @@ namespace TenmoClient
             if (menuSelection == 4)
             {
                 // Send TE bucks
-                //SendBucks();
+                SendBucks();
             }
 
             if (menuSelection == 5)
@@ -114,31 +115,35 @@ namespace TenmoClient
 
         private void GetBalance()
         {
-            Account account = tenmoApiService.GetBalance(user);
+            Account account = tenmoApiService.GetAccount(user);
             console.GetBalance(account.Balance);
             console.Pause();
             //Console.WriteLine(balance);
         }
 
-        //private void ViewPastTransfers()
-        //{
-        //    List<Transfer> transfers = new List<Transfer>();
-        //    tenmoApiService.ViewPastTransfers(user);
-        //    console.ViewPastTransfers(transfers);    //Invesigate
-        //    console.Pause();
-        //    // would you like to view specific transfer? 
-        //    // readline?
-        //    // tenmoapiservice view specific transfer
-        //}
+        private void ViewPastTransfers()
+        {
+            List<Transfer> transfers = new List<Transfer>();
+            tenmoApiService.ViewPastTransfers(user);
+            //console.ViewPastTransfers(transfers);    //Invesigate
+            console.Pause();
+            // would you like to view specific transfer? 
+            // readline?
+            // tenmoapiservice view specific transfer
+        }
 
-        //private void SendBucks()
-        //{
-        //    List<ApiUser> users = new List<ApiUser>();
-        //    users = tenmoApiService.GetUsers(user);
-        //    console.GetUsers();
-        //    console.Pause();
+        private void SendBucks()
+        {
+            List<ApiUser> users = tenmoApiService.GetListOfUsers();//thank you david for the lambda
+            int transferToUserId = console.PromptForTransferToUser(users.Where(u => u.UserId != user.UserId).ToList());//this is filtering the current user from list
+            Account toAccount = tenmoApiService.GetAccount(new ApiUser { UserId = transferToUserId });
+            //TODO: filter on database side
+            Account fromAccount = tenmoApiService.GetAccount(user);
+            decimal amount = console.PromptForTransferAmount(fromAccount.Balance);
+            tenmoApiService.CreateTransfer(fromAccount.AccountId, toAccount.AccountId, amount);
+            console.Pause();
 
-        //}
+        }
 
 
 
