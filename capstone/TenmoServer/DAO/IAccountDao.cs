@@ -8,6 +8,6 @@ namespace TenmoServer.DAO
 {
     public interface IAccountDao
     {
-        public Account GetBalance(int userId); // we need to see the account balance per README
+        public Account GetAccount(int userId); // we need to see the account balance per README
     }
 }

@@ -22,19 +22,20 @@ namespace TenmoServer.Controllers
             this.transferDao = transferDao;
         }
 
-        ////POST: TransfersController/Create
-        //[HttpPost("{user.UserId}")] // TODO: how to make endpoints work? throwing exception that this route is implemented multiple times???
-        //public ActionResult<Transfer> CreateTransfer(User user, Transfer transfer)
-        //{
-        //    Transfer createdTransfer = transferDao.CreateTransfer(user, transfer);
-        //    return Created($"/transfers/{user.UserId}/{createdTransfer.TransferId}", createdTransfer);
-        //}
+        //POST: TransfersController/Create
+        [HttpPost] // TODO: how to make endpoints work? throwing exception that this route is implemented multiple times???
+        public ActionResult<Transfer> CreateTransfer(Transfer transfer)
+        {
+            Transfer t = transferDao.CreateTransfer(transfer);
+            transferDao.UpdateBalanceForTransferAccounts(transfer);
+            return Created($"/transfers/{t.AccountFrom}/{t.TransferId}", t);
+        }
 
         // GET: TransfersController/Details/5
-        [HttpGet("{user.UserId}/{transferId}")] // transfers/userid/transfer id
-        public ActionResult<Transfer> GetSpecificTransfer(User user, int transferId)
+        [HttpGet("{transferId}")] // transfers/userid/transfer id //removed userid from 
+        public ActionResult<Transfer> GetSpecificTransfer(int transferId)
         {
-            Transfer transfer = transferDao.GetSpecificTransfer(user, transferId);
+            Transfer transfer = transferDao.GetSpecificTransfer(transferId);
             if (transfer != null)
             {
                 return Ok(transfer);
@@ -44,7 +45,7 @@ namespace TenmoServer.Controllers
                 return NotFound();
             }
         }
-    
+
         // GET: TransfersController
         //[HttpGet("{user.UserId}/transferList")] //possibly use user url
         //public ActionResult<List<Transfer>> GetTransfers(User user) // status code 500
@@ -59,34 +60,28 @@ namespace TenmoServer.Controllers
         //    }
         //}
 
-        [HttpPut("updateBalances")]
-        public ActionResult<bool> UpdateBalanceForTransferAccounts(Transfer transfer)
-        {
-            bool result = transferDao.UpdateBalanceForTransferAccounts(transfer);
-            if (result)
-            {
-                return Ok();
-            }
-            else
-            {
-                return StatusCode(500);
-            }
-            
-        //}
-
-        //[HttpGet("userList")] //users to transfer to
-        //public ActionResult<List<User>> GetListOfUsers(User user)
+        //[HttpPut("updateBalances")]
+        //public ActionResult<bool> UpdateBalanceForTransferAccounts(Transfer transfer)
         //{
-        //    if (User.Identity.Name != null)
+        //    bool result = transferDao.UpdateBalanceForTransferAccounts(transfer);
+        //    if (result)
         //    {
-        //        return transferDao.GetListOfUsers(user);
+        //        return Ok();
         //    }
         //    else
         //    {
-        //        return Unauthorized("Please login to view your transfers.");
+        //        return StatusCode(500);
         //    }
-        //}
 
+        // }
+
+         [HttpGet("userList")] //users to transfer to
+         public ActionResult<List<TransferRecipient>> GetListOfUsers()
+         {
+            List<TransferRecipient> recipients = transferDao.GetListOfUsers();
+            return Ok(recipients);
+         }
+        
 
     }
 }

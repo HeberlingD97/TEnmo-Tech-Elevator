@@ -19,7 +19,7 @@ namespace TenmoServer.Models
         public decimal Amount { get; set; } = 0.0M; // amount to transfer, default would be 0. add amount to default that we would transfer.
         public Transfer() { }
 
-        public Transfer(int transferId, int accountFrom, int accountTo, decimal amount)
+        public Transfer(int transferId, int accountFrom, int accountTo, decimal amount)//dont need this.
         {
             this.TransferId = transferId;
             this.AccountFrom = accountFrom;
