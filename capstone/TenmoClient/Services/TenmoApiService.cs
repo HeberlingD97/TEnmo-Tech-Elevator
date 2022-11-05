@@ -22,7 +22,7 @@ namespace TenmoClient.Services
 
         public List<Transfer> ViewPastTransfers(ApiUser user)
         {
-            RestRequest request = new RestRequest($"transferList");
+            RestRequest request = new RestRequest($"transfers/transferList");
             IRestResponse<List<Transfer>> response = client.Get<List<Transfer>>(request);
 
             CheckForError(response);
@@ -58,7 +58,7 @@ namespace TenmoClient.Services
 
         public Transfer UpdateBalanceForTransferAccounts(Transfer updatingTransfer)
         {
-            RestRequest req = new RestRequest($"transfer/{updatingTransfer.TransferId}");
+            RestRequest req = new RestRequest($"transfers/{updatingTransfer.TransferId}");
             req.AddJsonBody(updatingTransfer);
             IRestResponse<Transfer> response = client.Put<Transfer>(req);
             CheckForError(response);

@@ -12,13 +12,18 @@
 
         public ApiUser() { }
 
+        public ApiUser(int userId, string username, string token)
+        {
+            this.UserId = userId;
+            this.Username = username;
+            this.Token = token;
+        }
         public ApiUser(int userId, string username, string token, string message)
         {
             this.UserId = userId;
             this.Username = username;
             this.Token = token;
             this.Message = message;
-
         }
     }
 
