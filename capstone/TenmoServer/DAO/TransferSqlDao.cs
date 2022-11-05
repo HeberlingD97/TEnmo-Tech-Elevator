@@ -60,7 +60,7 @@ namespace TenmoServer.DAO
                 {
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfer JOIN account ON account_id IN (account_from, account_to) WHERE user_id = @user_id;", conn);
+                    SqlCommand cmd = new SqlCommand("SELECT transfer_id, transfer_status_id, transfer_type_id, account_from, account_to, amount FROM transfer JOIN account ON account_id IN (account_from, account_to) WHERE user_id = @user_id;", conn);
                     cmd.Parameters.AddWithValue("@user_id", userId);
                     SqlDataReader reader = cmd.ExecuteReader();
 
@@ -69,14 +69,17 @@ namespace TenmoServer.DAO
                         Transfer transfer = GetTransferFromReader(reader);
                         transfers.Add(transfer);
                     }
-
+                    if (transfers == null)
+                    {
+                        return null;
+                    }
+                    return transfers.Select(t => new Transfer(t.TransferId, t.TransferStatusId, t.TransferTypeId, t.AccountFrom, t.AccountTo, t.Amount)).ToList();//this lambda function takes each user and "massages" them into transfer recipients
                 }
             }
             catch (SqlException)
             {
                 throw;
             }
-            return transfers;
 
         }
         // As an authenticated user of the system, I need to be able to retrieve the details of any transfer based upon the transfer ID.

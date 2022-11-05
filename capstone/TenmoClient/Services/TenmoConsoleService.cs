@@ -59,27 +59,30 @@ namespace TenmoClient.Services
             Console.WriteLine($"Your current account balance is: ${balance}");
         }
 
-        //public void viewpasttransfers(list<transfer> transfers, list<apiuser> users)
-        //{
-        //    console.writeline("-------------------------------------------");
-        //    console.writeline("transfers");
-        //    console.writeline("id           from/ to                 amount");
-        //    console.writeline("------------------------------------------");
+        public void ViewPastTransfers(List<Transfer> transfers, List<ApiUser> users, int userAccountId)
+        {
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("Transfers");
+            Console.WriteLine("ID           From/ To                 Amount");
+            Console.WriteLine("------------------------------------------");
 
-        //    foreach (transfer transfer in transfers) // get list of users to call for the username
-        //    {
-        //        if (transfer.transfertypeid == 1)
-        //        {
-        //            console.writeline($"{transfer.transferid}          from: {user.username}          ${transfer.amount}");
-        //        }
-        //        else                
-        //        {
-        //            console.writeline($"{transfer.transferid}          to: {user.username}              ${transfer.amount}");
-        //        }
-        //    }
-        //    console.writeline("-----------------------------------------");
-        //    console.writeline("please enter transfer id to view details(0 to cancel): ");
-        //}
+            foreach (Transfer transfer in transfers) // Get list of users to call for the username
+            {
+                foreach (ApiUser u in users)
+                {
+                    if ((transfer.TransferTypeId == 1) && (transfer.AccountTo == userAccountId))
+                    {
+                        Console.WriteLine($"{transfer.TransferId}          From: {u.Username}          ${transfer.Amount}");
+                    }
+                    else if ((transfer.TransferTypeId == 2) && (transfer.AccountFrom == userAccountId))               
+                    {
+                        Console.WriteLine($"{transfer.TransferId}          To: {u.Username}              ${transfer.Amount}");
+                    }
+                }  
+            }
+            Console.WriteLine("-----------------------------------------");
+            Console.WriteLine("Please enter transfer ID to view details(0 to cancel): ");
+        }
 
         public void SendBucks(List<Transfer> transfers, int transferId, ApiUser user, decimal amount) // print
         {

@@ -84,7 +84,7 @@ namespace TenmoClient
             if (menuSelection == 2)
             {
                 // View your past transfers
-                //ViewPastTransfers();
+                ViewPastTransfers();
             }
 
             if (menuSelection == 3)
@@ -127,9 +127,9 @@ namespace TenmoClient
             transfers = tenmoApiService.ViewPastTransfers(user);
             List<ApiUser> users = new List<ApiUser>();
             users = tenmoApiService.GetListOfUsers();
-            
+            Account userAccount = tenmoApiService.GetAccount(user);
             // function to reconcile what we want to print, then just pass  info to print, then print
-            //console.ViewPastTransfers(transfers, users);    //Invesigate
+            console.ViewPastTransfers(transfers, users, userAccount.AccountId);    //Invesigate
             console.Pause();
             // would you like to view specific transfer? 
             // readline?
