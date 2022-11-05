@@ -22,57 +22,57 @@ namespace TenmoServer.Controllers
             this.transferDao = transferDao;
         }
 
-        //POST: TransfersController/Create
-        [HttpPost("{UserId}")] // TODO: how to make endpoints work? throwing exception that this route is implemented multiple times???
-        public ActionResult<Transfer> CreateTransfer(User user, Transfer transfer) // can only pass in 1 parameter?
-        {
-            Transfer createdTransfer = transferDao.CreateTransfer(user, transfer);
-            return Created($"/transfers/{user.UserId}/{createdTransfer.TransferId}", createdTransfer);
-        }
+        ////POST: TransfersController/Create
+        //[HttpPost("{UserId}")] // TODO: how to make endpoints work? throwing exception that this route is implemented multiple times???
+        //public ActionResult<Transfer> CreateTransfer(User user, Transfer transfer) // can only pass in 1 parameter?
+        //{
+        //    Transfer createdTransfer = transferDao.CreateTransfer(user, transfer);
+        //    return Created($"/transfers/{user.UserId}/{createdTransfer.TransferId}", createdTransfer);
+        //}
 
-        // GET: TransfersController/Details/5
-        [HttpGet("{UserId}/{transferId}")] // transfers/userid/transfer id
-        public ActionResult<Transfer> GetSpecificTransfer(User user, int transferId)
-        {
-            Transfer transfer = transferDao.GetSpecificTransfer(user, transferId);
-            if (transfer != null)
-            {
-                return Ok(transfer);
-            }
-            else
-            {
-                return NotFound();
-            }
-        }
+        //// GET: TransfersController/Details/5
+        //[HttpGet("{UserId}/{transferId}")] // transfers/userid/transfer id
+        //public ActionResult<Transfer> GetSpecificTransfer(User user, int transferId)
+        //{
+        //    Transfer transfer = transferDao.GetSpecificTransfer(user, transferId);
+        //    if (transfer != null)
+        //    {
+        //        return Ok(transfer);
+        //    }
+        //    else
+        //    {
+        //        return NotFound();
+        //    }
+        //}
 
-        //GET: TransfersController
-        [HttpGet("{UserId}/transferList")] //possibly use user url
-        public ActionResult<List<Transfer>> GetTransfers(User user) // status code 500
-        {
-            if (User.Identity.Name != null)
-            {
-                return transferDao.GetTransfers(user);
-            }
-            else
-            {
-                return Unauthorized("Please login to view your transfers.");
-            }
-        }
+        ////GET: TransfersController
+        //[HttpGet("{UserId}/transferList")] //possibly use user url
+        //public ActionResult<List<Transfer>> GetTransfers(User user) // status code 500
+        //{
+        //    if (User.Identity.Name != null)
+        //    {
+        //        return transferDao.GetTransfers(user);
+        //    }
+        //    else
+        //    {
+        //        return Unauthorized("Please login to view your transfers.");
+        //    }
+        //}
 
-        [HttpPut("perform/{transfer}")]
-        public ActionResult<bool> UpdateBalanceForTransferAccounts(Transfer transfer)
-        {
-            bool result = transferDao.UpdateBalanceForTransferAccounts(transfer);
-            if (result)
-            {
-                return Ok();
-            }
-            else
-            {
-                return StatusCode(500);
-            }
+        //[HttpPut("perform/{transfer}")]
+        //public ActionResult<bool> UpdateBalanceForTransferAccounts(Transfer transfer)
+        //{
+        //    bool result = transferDao.UpdateBalanceForTransferAccounts(transfer);
+        //    if (result)
+        //    {
+        //        return Ok();
+        //    }
+        //    else
+        //    {
+        //        return StatusCode(500);
+        //    }
             
-        }
+        //}
 
         [HttpGet("{UserId}/userList")] //users to transfer to
         public ActionResult<List<User>> GetListOfUsers(User user)

@@ -73,4 +73,4 @@ transfer id
 to/from
 amount
 
-
+SELECT username, user_id FROM tenmo_user WHERE user_id != 1001
