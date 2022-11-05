@@ -46,36 +46,36 @@ namespace TenmoServer.Controllers
             }
         }
 
-        // GET: TransfersController
-        //[HttpGet("{user.UserId}/transferList")] //possibly use user url
-        //public ActionResult<List<Transfer>> GetTransfers(User user) // status code 500
-        //{
-        //    if (User.Identity.Name != null)
-        //    {
-        //        return transferDao.GetTransfers(user);
-        //    }
-        //    else
-        //    {
-        //        return Unauthorized("Please login to view your transfers.");
-        //    }
-        //}
+        //GET: TransfersController
+       [HttpGet("transferList")] //possibly use user url
+        public ActionResult<List<Transfer>> GetTransfers(ReturnUser user) // status code 500
+        {
+            if (User.Identity.Name != null)
+            {
+                return transferDao.GetTransfers(user.UserId);
+            }
+            else
+            {
+                return Unauthorized("Please login to view your transfers.");
+            }
+        }
 
-        //[HttpPut("updateBalances")]
-        //public ActionResult<bool> UpdateBalanceForTransferAccounts(Transfer transfer)
-        //{
-        //    bool result = transferDao.UpdateBalanceForTransferAccounts(transfer);
-        //    if (result)
-        //    {
-        //        return Ok();
-        //    }
-        //    else
-        //    {
-        //        return StatusCode(500);
-        //    }
+        [HttpPut("updateBalances")]
+        public ActionResult<bool> UpdateBalanceForTransferAccounts(Transfer transfer)
+        {
+            bool result = transferDao.UpdateBalanceForTransferAccounts(transfer);
+            if (result)
+            {
+                return Ok();
+            }
+            else
+            {
+                return StatusCode(500);
+            }
 
-        // }
+        }
 
-         [HttpGet("userList")] //users to transfer to
+        [HttpGet("userList")] //users to transfer to
          public ActionResult<List<TransferRecipient>> GetListOfUsers()
          {
             List<TransferRecipient> recipients = transferDao.GetListOfUsers();

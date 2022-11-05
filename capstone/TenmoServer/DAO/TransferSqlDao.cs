@@ -60,14 +60,14 @@ namespace TenmoServer.DAO
                 {
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("SELECT transfer_id, user_id, amount FROM transfer JOIN account ON account_id IN (account_from, account_to) WHERE user_id = @user_id;", conn);
+                    SqlCommand cmd = new SqlCommand("SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfer JOIN account ON account_id IN (account_from, account_to) WHERE user_id = @user_id;", conn);
                     cmd.Parameters.AddWithValue("@user_id", userId);
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     while (reader.Read())
                     {
-                        Transfer t = GetTransferFromReader(reader);
-                        transfers.Add(t);
+                        Transfer transfer = GetTransferFromReader(reader);
+                        transfers.Add(transfer);
                     }
 
                 }
@@ -133,7 +133,7 @@ namespace TenmoServer.DAO
         //      A Sending Transfer has an initial status of Approved.
 
         //      The receiver's account balance is increased by the amount of the transfer.
-        public void UpdateBalanceForTransferAccounts(Transfer transfer) // possibly edit transfer
+        public bool UpdateBalanceForTransferAccounts(Transfer transfer) // possibly edit transfer
         {
             try // try reading from SQL all data where we have given uder id
             {
@@ -151,13 +151,15 @@ namespace TenmoServer.DAO
                     cmdUpdateRecipient.Parameters.AddWithValue("@account_id", transfer.AccountTo);
                     cmdUpdateRecipient.ExecuteNonQuery();
                  
-                    return;
+                    return true;
                 }
             }
             catch (SqlException)
             {
                 throw;
             }
+                
+            
         }
         //      The sender's account balance is decreased by the amount of the transfer.
 
