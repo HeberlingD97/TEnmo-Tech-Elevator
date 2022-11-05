@@ -59,28 +59,27 @@ namespace TenmoClient.Services
             Console.WriteLine($"Your current account balance is: ${balance}");
         }
 
-        public void ViewPastTransfers(List<Transfer> transfers, int transferID, ApiUser user, int accountFrom, int accountTo)
-        {
-            List<Transfer> tranfers = new List<Transfer>();
-            Console.WriteLine("-------------------------------------------");
-            Console.WriteLine("Transfers");
-            Console.WriteLine("ID           From/ To                 Amount");
-            Console.WriteLine("------------------------------------------");
+        //public void viewpasttransfers(list<transfer> transfers, list<apiuser> users)
+        //{
+        //    console.writeline("-------------------------------------------");
+        //    console.writeline("transfers");
+        //    console.writeline("id           from/ to                 amount");
+        //    console.writeline("------------------------------------------");
 
-            foreach (Transfer transfer in transfers) // Get list of users to call for the username
-            {
-                if (transfer.TransferTypeId == 1)
-                {
-                    Console.WriteLine($"{transfer.TransferId}          From: {user.Username}          ${transfer.Amount}");
-                }
-                else                
-                {
-                    Console.WriteLine($"{transfer.TransferId}          To: {user.Username}              ${transfer.Amount}");
-                }
-            }
-            Console.WriteLine("-----------------------------------------");
-            Console.WriteLine("Please enter transfer ID to view details(0 to cancel): ");
-        }
+        //    foreach (transfer transfer in transfers) // get list of users to call for the username
+        //    {
+        //        if (transfer.transfertypeid == 1)
+        //        {
+        //            console.writeline($"{transfer.transferid}          from: {user.username}          ${transfer.amount}");
+        //        }
+        //        else                
+        //        {
+        //            console.writeline($"{transfer.transferid}          to: {user.username}              ${transfer.amount}");
+        //        }
+        //    }
+        //    console.writeline("-----------------------------------------");
+        //    console.writeline("please enter transfer id to view details(0 to cancel): ");
+        //}
 
         public void SendBucks(List<Transfer> transfers, int transferId, ApiUser user, decimal amount) // print
         {
@@ -144,6 +143,9 @@ namespace TenmoClient.Services
             }
             return amountToSend;
         }
+
+        //internal // output: transfer ids, other usernames, amounts 
+            // input list transfers & list of users, account list?
 
         //public void ViewSpecificTransfer()
         //{

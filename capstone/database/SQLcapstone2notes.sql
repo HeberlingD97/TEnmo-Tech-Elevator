@@ -30,7 +30,7 @@
 	SELECT * FROM transfer_type;
 	INSERT INTO transfer (transfer_status_id, transfer_type_id, account_from, account_to, amount)
 	OUTPUT inserted.transfer_id
-	VALUES (2, 2, 2001, 2002, 10.00);
+	VALUES (2, 2, 2002, 2003, 10.00);
 
 	BEGIN TRANSACTION;
     UPDATE account SET balance = ((SELECT balance FROM account JOIN transfer ON account_id = account_from WHERE transfer_id = 3002)
@@ -74,3 +74,16 @@ to/from
 amount
 
 SELECT username, user_id FROM tenmo_user WHERE user_id != 1001
+
+SELECT transfer_id, username, amount FROM transfer 
+JOIN account ON account_id = account_from 
+JOIN tenmo_user ON account.user_id = tenmo_user.user_id
+
+
+SELECT transfer_id, username, amount FROM transfer 
+JOIN account ON account_id = account_to 
+JOIN tenmo_user ON account.user_id = tenmo_user.user_id
+
+DELETE FROM transfer
+
+SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfer JOIN account ON account_id IN (account_from, account_to) WHERE user_id = 1002;

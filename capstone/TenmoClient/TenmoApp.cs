@@ -124,8 +124,12 @@ namespace TenmoClient
         private void ViewPastTransfers()
         {
             List<Transfer> transfers = new List<Transfer>();
-            tenmoApiService.ViewPastTransfers(user);
-            //console.ViewPastTransfers(transfers);    //Invesigate
+            transfers = tenmoApiService.ViewPastTransfers(user);
+            List<ApiUser> users = new List<ApiUser>();
+            users = tenmoApiService.GetListOfUsers();
+            
+            // function to reconcile what we want to print, then just pass  info to print, then print
+            //console.ViewPastTransfers(transfers, users);    //Invesigate
             console.Pause();
             // would you like to view specific transfer? 
             // readline?
@@ -141,8 +145,8 @@ namespace TenmoClient
             Account fromAccount = tenmoApiService.GetAccount(user);
             decimal amount = console.PromptForTransferAmount(fromAccount.Balance);
             tenmoApiService.CreateTransfer(fromAccount.AccountId, toAccount.AccountId, amount);
+            console.PrintSuccess("Transfer successful.");
             console.Pause();
-
         }
 
 
