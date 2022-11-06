@@ -20,10 +20,10 @@ namespace TenmoClient.Services
             // TODO:  unable to reach server to test if this method actually works
         }
 
-        public List<Transfer> ViewPastTransfers(ApiUser user)
+        public List<TransferHistory> GetPastTransfers(int userId)
         {
-            RestRequest request = new RestRequest($"{user.UserId}/transferList");
-            IRestResponse<List<Transfer>> response = client.Get<List<Transfer>>(request);
+            RestRequest request = new RestRequest($"transfers/list/{userId}");
+            IRestResponse<List<TransferHistory>> response = client.Get<List<TransferHistory>>(request);
 
             CheckForError(response);
             return response.Data;

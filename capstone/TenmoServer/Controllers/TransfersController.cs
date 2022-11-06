@@ -47,18 +47,18 @@ namespace TenmoServer.Controllers
         }
 
         // GET: TransfersController
-        //[HttpGet("{user.UserId}/transferList")] //possibly use user url
-        //public ActionResult<List<Transfer>> GetTransfers(User user) // status code 500
-        //{
-        //    if (User.Identity.Name != null)
-        //    {
-        //        return transferDao.GetTransfers(user);
-        //    }
-        //    else
-        //    {
-        //        return Unauthorized("Please login to view your transfers.");
-        //    }
-        //}
+        [HttpGet("list/{userId}")] //possibly use user url
+        public ActionResult<List<TransferHistory>> GetTransfers(int userId) // status code 500
+        {
+            if (User.Identity.Name != null)
+            {
+                return transferDao.GetTransfers(userId);
+            }
+            else
+            {
+                return Unauthorized("Please login to view your transfers.");
+            }
+        }
 
         //[HttpPut("updateBalances")]
         //public ActionResult<bool> UpdateBalanceForTransferAccounts(Transfer transfer)
@@ -75,7 +75,7 @@ namespace TenmoServer.Controllers
 
         // }
 
-         [HttpGet("userList")] //users to transfer to
+        [HttpGet("userList")] //users to transfer to
          public ActionResult<List<TransferRecipient>> GetListOfUsers()
          {
             List<TransferRecipient> recipients = transferDao.GetListOfUsers();
