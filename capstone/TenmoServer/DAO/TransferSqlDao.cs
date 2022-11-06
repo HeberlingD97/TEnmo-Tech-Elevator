@@ -11,12 +11,11 @@ namespace TenmoServer.DAO
     public class TransferSqlDao : ITransferDao
     {
         private readonly string connectionString;
-
+        
         public TransferSqlDao(string dbConnectionString)
         {
             connectionString = dbConnectionString;
         }
-
 
         //      I should be able to choose from a list of users to send TE Bucks to.
         public List<TransferRecipient> GetListOfUsers()
@@ -50,24 +49,32 @@ namespace TenmoServer.DAO
         //      A transfer should include the User IDs of the from and to users and the amount of TE Bucks.
 
         // As an authenticated user of the system, I need to be able to see transfers I have sent or received.
-        public List<Transfer> GetTransfers(int userId)//changed from user to user id
+        public List<TransferHistory> GetTransfers(int userId)//changed from user to user id
         {
-            List<Transfer> transfers = null;
+            List<TransferHistory> transfers = new List<TransferHistory>();
 
             try // try reading from SQL all data where we have given uder id
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
+                    SqlCommand cmd = new SqlCommand("SELECT transfer_id, " +
+                        "(SELECT username FROM tenmo_user WHERE user_id = " +
+                            "(SELECT user_id FROM account WHERE account_id = account_from)) AS sender, " +
+                        "(SELECT username FROM tenmo_user WHERE user_id = " +
+                            "(SELECT user_id FROM account WHERE account_id = account_to)) AS recipient, " +
+                        "amount FROM transfer " +
+                    "WHERE" +
+                        "(SELECT account_id FROM account WHERE user_id = @user_id) " +
+                        "IN(account_from, account_to);", conn);
 
-                    SqlCommand cmd = new SqlCommand("SELECT transfer_id, transfer_status_id, transfer_type_id, account_from, account_to, amount FROM transfer JOIN account ON account_id IN (account_from, account_to) WHERE user_id = @user_id;", conn);
                     cmd.Parameters.AddWithValue("@user_id", userId);
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     while (reader.Read())
                     {
-                        Transfer transfer = GetTransferFromReader(reader);
-                        transfers.Add(transfer);
+                        TransferHistory t = GetTransferHistoryFromReader(reader);
+                        transfers.Add(t);
                     }
                     if (transfers == null)
                     {
@@ -79,9 +86,12 @@ namespace TenmoServer.DAO
             catch (SqlException)
             {
                 throw;
-            }
+            } 
+            return transfers;
 
         }
+
+
         // As an authenticated user of the system, I need to be able to retrieve the details of any transfer based upon the transfer ID.
         public Transfer GetSpecificTransfer(int transferId)//removed user object param and if user is null
         {
@@ -184,6 +194,20 @@ namespace TenmoServer.DAO
 
             return t;
         }
+
+
+        private TransferHistory GetTransferHistoryFromReader(SqlDataReader reader)
+        {
+            return new TransferHistory()
+            {
+                TransferId = Convert.ToInt32(reader["transfer_id"]),
+                Sender = Convert.ToString(reader["sender"]),
+                Recipient = Convert.ToString(reader["recipient"]),
+                Amount = Convert.ToDecimal(reader["amount"])
+            };
+
+        }
+
         private User GetUserNamesFromReader(SqlDataReader reader)
         {
             User u = new User()

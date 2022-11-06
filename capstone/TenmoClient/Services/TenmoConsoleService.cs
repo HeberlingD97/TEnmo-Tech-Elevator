@@ -59,26 +59,25 @@ namespace TenmoClient.Services
             Console.WriteLine($"Your current account balance is: ${balance}");
         }
 
-        public void ViewPastTransfers(List<Transfer> transfers, List<ApiUser> users, int userAccountId)
+        public void ViewPastTransfers(List<TransferHistory> transfers, string username)
         {
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("Transfers");
             Console.WriteLine("ID           From/ To                 Amount");
             Console.WriteLine("------------------------------------------");
 
-            foreach (Transfer transfer in transfers) // Get list of users to call for the username
+            foreach (TransferHistory transfer in transfers) // Get list of users to call for the username
             {
-                foreach (ApiUser u in users)
+                string fromOrTo = "";
+                if(transfer.Sender == username)
                 {
-                    if ((transfer.TransferTypeId == 1) && (transfer.AccountTo == userAccountId))
-                    {
-                        Console.WriteLine($"{transfer.TransferId}          From: {u.Username}          ${transfer.Amount}");
-                    }
-                    else if ((transfer.TransferTypeId == 2) && (transfer.AccountFrom == userAccountId))               
-                    {
-                        Console.WriteLine($"{transfer.TransferId}          To: {u.Username}              ${transfer.Amount}");
-                    }
-                }  
+                    fromOrTo = $"To: {transfer.Recipient}";//who we sent it to
+                }
+                else
+                {
+                    fromOrTo = $"From: {transfer.Sender}";//who its from
+                }
+                Console.WriteLine($"{transfer.TransferId}          {fromOrTo}          ${transfer.Amount}");
             }
             Console.WriteLine("-----------------------------------------");
             Console.WriteLine("Please enter transfer ID to view details(0 to cancel): ");

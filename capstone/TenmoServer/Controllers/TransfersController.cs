@@ -46,13 +46,13 @@ namespace TenmoServer.Controllers
             }
         }
 
-        //GET: TransfersController
-       [HttpGet("transferList")] //possibly use user url
-        public ActionResult<List<Transfer>> GetTransfers(ReturnUser user) // status code 500
+        // GET: TransfersController
+        [HttpGet("list/{userId}")] //possibly use user url
+        public ActionResult<List<TransferHistory>> GetTransfers(int userId) // status code 500
         {
             if (User.Identity.Name != null)
             {
-                return transferDao.GetTransfers(user.UserId);
+                return transferDao.GetTransfers(userId);
             }
             else
             {
