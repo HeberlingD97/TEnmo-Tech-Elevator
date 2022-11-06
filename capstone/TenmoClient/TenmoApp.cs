@@ -12,6 +12,7 @@ namespace TenmoClient
         private readonly TenmoConsoleService console = new TenmoConsoleService();
         private readonly TenmoApiService tenmoApiService;
         private ApiUser user = null;
+        
 
         public TenmoApp(string apiUrl)
         {
@@ -67,7 +68,7 @@ namespace TenmoClient
         private bool RunAuthenticated()
         {
             console.PrintMainMenu(tenmoApiService.Username);
-            int menuSelection = console.PromptForInteger("Please choose an option", 0, 6);
+            int menuSelection = console.PromptForInteger("Please choose an option", 0, 7);
             if (menuSelection == 0)
             {
                 // Exit the loop
@@ -103,7 +104,12 @@ namespace TenmoClient
                 // Request TE bucks
             }
 
-            if (menuSelection == 6)
+            //if (menuSelection == 6)
+            //{
+            //    // View Specific Transfer
+            //    ViewSpecificTransfer();
+            //}
+            if (menuSelection == 7)
             {
                 // Log out
                 tenmoApiService.Logout();
@@ -123,15 +129,26 @@ namespace TenmoClient
 
         private void ViewPastTransfers()
         {
-            List<Transfer> transfers = new List<Transfer>();
-            transfers = tenmoApiService.ViewPastTransfers(user);
-            List<ApiUser> users = new List<ApiUser>();
-            users = tenmoApiService.GetListOfUsers();
-            Account userAccount = tenmoApiService.GetAccount(user);
+            ClientReturnUser userToServer = null;
+            List<ViewableTransfer> transfers = new List<ViewableTransfer>();
+            if (user != null)
+            {
+                userToServer = new ClientReturnUser();
+            }
+            transfers = tenmoApiService.ViewPastTransfers(userToServer);
+            //List<ApiUser> users = new List<ApiUser>();
+            //users = tenmoApiService.GetListOfUsers();
+            //Account userAccount = tenmoApiService.GetAccount(user);
             // function to reconcile what we want to print, then just pass  info to print, then print
-            console.ViewPastTransfers(transfers, users, userAccount.AccountId);    //Invesigate
+            console.ViewPastTransfers(transfers, user);    //Invesigate
             console.Pause();
             // would you like to view specific transfer? 
+            int willSeeTransfer = console.PromptForInteger("Would you like to view a specific transfer? Press 1 for \'yes\' or 0 for \'no.\' ");
+            if (willSeeTransfer == 1)
+            {
+                ViewSpecificTranfer();
+            }
+            console.Pause();
             // readline?
             // tenmoapiservice view specific transfer
         }
@@ -149,7 +166,13 @@ namespace TenmoClient
             console.Pause();
         }
 
-
+        private void ViewSpecificTranfer() //TODO
+        {
+            int transferId = console.PromptForInteger("Please entire the Transfer ID of the transfer you would like to view: ");
+            ViewableTransfer transfer = tenmoApiService.ViewSpecificTransfer(user, transferId);
+            console.ViewSpecificTransfer(transfer);
+            console.Pause();
+        }
 
 
         private void Login()

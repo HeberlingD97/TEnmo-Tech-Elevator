@@ -48,7 +48,7 @@ namespace TenmoServer.Controllers
 
         //GET: TransfersController
        [HttpGet("transferList")] //possibly use user url
-        public ActionResult<List<Transfer>> GetTransfers(ReturnUser user) // status code 500
+        public ActionResult<List<ViewableTransfer>> GetTransfers(ReturnUser user) // status code 500
         {
             if (User.Identity.Name != null)
             {

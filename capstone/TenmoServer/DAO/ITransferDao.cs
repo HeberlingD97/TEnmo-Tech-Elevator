@@ -23,9 +23,9 @@ namespace TenmoServer.DAO
         //      I can't send more TE Bucks than I have in my account.
         //      I can't send a zero or negative amount.
         // As an authenticated user of the system, I need to be able to see transfers I have sent or received.
-        public List<Transfer> GetTransfers(int userId);
+        public List<ViewableTransfer> GetTransfers(int userId);
         public Transfer CreateTransfer(Transfer transfer);
         // As an authenticated user of the system, I need to be able to retrieve the details of any transfer based upon the transfer ID.
-        public Transfer GetSpecificTransfer( int transferId);
+        public Transfer GetSpecificTransfer(int transferId);
     }
 }

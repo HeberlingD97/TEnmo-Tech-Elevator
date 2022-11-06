@@ -20,20 +20,20 @@ namespace TenmoClient.Services
             // TODO:  unable to reach server to test if this method actually works
         }
 
-        public List<Transfer> ViewPastTransfers(ApiUser user)
+        public List<ViewableTransfer> ViewPastTransfers(ClientReturnUser user)
         {
             RestRequest request = new RestRequest($"transfers/transferList");
-            IRestResponse<List<Transfer>> response = client.Get<List<Transfer>>(request);
+            IRestResponse<List<ViewableTransfer>> response = client.Get<List<ViewableTransfer>>(request);
 
             CheckForError(response);
             return response.Data;
 
         }
 
-        public Transfer ViewSpecificTransfer(ApiUser user, int transferId)
+        public ViewableTransfer ViewSpecificTransfer(ApiUser user, int transferId)
         {
             RestRequest request = new RestRequest($"/transfers/{transferId}/");
-            IRestResponse<Transfer> response = client.Get<Transfer>(request);
+            IRestResponse<ViewableTransfer> response = client.Get<ViewableTransfer>(request);
 
             CheckForError(response);
             return response.Data;

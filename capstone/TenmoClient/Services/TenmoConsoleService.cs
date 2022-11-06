@@ -59,26 +59,23 @@ namespace TenmoClient.Services
             Console.WriteLine($"Your current account balance is: ${balance}");
         }
 
-        public void ViewPastTransfers(List<Transfer> transfers, List<ApiUser> users, int userAccountId)
+        public void ViewPastTransfers(List<ViewableTransfer> transfers, ApiUser user)
         {
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("Transfers");
             Console.WriteLine("ID           From/ To                 Amount");
             Console.WriteLine("------------------------------------------");
 
-            foreach (Transfer transfer in transfers) // Get list of users to call for the username
+            foreach (ViewableTransfer transfer in transfers) // Get list of users to call for the username
             {
-                foreach (ApiUser u in users)
+                if ((transfer.TransferTypeId == 1) && (transfer.Recipient == user.Username))
                 {
-                    if ((transfer.TransferTypeId == 1) && (transfer.AccountTo == userAccountId))
-                    {
-                        Console.WriteLine($"{transfer.TransferId}          From: {u.Username}          ${transfer.Amount}");
-                    }
-                    else if ((transfer.TransferTypeId == 2) && (transfer.AccountFrom == userAccountId))               
-                    {
-                        Console.WriteLine($"{transfer.TransferId}          To: {u.Username}              ${transfer.Amount}");
-                    }
-                }  
+                    Console.WriteLine($"{transfer.TransferId}          From: {transfer.Sender}          ${transfer.Amount}");
+                }
+                else if ((transfer.TransferTypeId == 2) && (transfer.Sender == user.Username))              
+                {
+                    Console.WriteLine($"{transfer.TransferId}          To: {transfer.Recipient}              ${transfer.Amount}");
+                }
             }
             Console.WriteLine("-----------------------------------------");
             Console.WriteLine("Please enter transfer ID to view details(0 to cancel): ");
@@ -148,20 +145,20 @@ namespace TenmoClient.Services
         }
 
         //internal // output: transfer ids, other usernames, amounts 
-            // input list transfers & list of users, account list?
+        // input list transfers & list of users, account list?
 
-        //public void ViewSpecificTransfer()
-        //{
-        //    Console.WriteLine("--------------------------------------------");
-        //    Console.WriteLine("Transfer Details");
-        //    Console.WriteLine("--------------------------------------------");
-        //    Console.WriteLine($"Id: {transfer.TransferId}");
-        //    Console.WriteLine($"From: {/*ApiUser Account ID*/}");
-        //    Console.WriteLine($"To: Me Myselfandi");
-        //    Console.WriteLine($"Type: Send"); // read from sql?
-        //    Console.WriteLine($"Status: Approved");
-        //    Console.WriteLine($"Amount: {transfer.amount}");
-        //}
+        public void ViewSpecificTransfer(ViewableTransfer transfer)
+        {
+            Console.WriteLine("--------------------------------------------");
+            Console.WriteLine("Transfer Details");
+            Console.WriteLine("--------------------------------------------");
+            Console.WriteLine($"Id: {transfer.TransferId}");
+            Console.WriteLine($"From: {transfer.Sender}"); // username
+            Console.WriteLine($"To: {transfer.Recipient}");
+            Console.WriteLine($"Type: Send"); // read from sql?
+            Console.WriteLine($"Status: Approved");
+            Console.WriteLine($"Amount: {transfer.Amount}");
+        }
 
     }
 }

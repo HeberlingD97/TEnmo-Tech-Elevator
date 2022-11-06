@@ -50,9 +50,9 @@ namespace TenmoServer.DAO
         //      A transfer should include the User IDs of the from and to users and the amount of TE Bucks.
 
         // As an authenticated user of the system, I need to be able to see transfers I have sent or received.
-        public List<Transfer> GetTransfers(int userId)//changed from user to user id
+        public List<ViewableTransfer> GetTransfers(int userId)//changed from user to user id
         {
-            List<Transfer> transfers = null;
+            List<ViewableTransfer> transfers = null;
 
             try // try reading from SQL all data where we have given uder id
             {
@@ -60,26 +60,30 @@ namespace TenmoServer.DAO
                 {
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("SELECT transfer_id, transfer_status_id, transfer_type_id, account_from, account_to, amount FROM transfer JOIN account ON account_id IN (account_from, account_to) WHERE user_id = @user_id;", conn);
+                    SqlCommand cmd = new SqlCommand("SELECT transfer_id, transfer_status_id " +
+                        "(SELECT username FROM tenmo_user WHERE user_id = (SELECT user_id FROM account WHERE account_id = account_from)) AS sender, " +
+                        "(SELECT username FROM tenmo_user WHERE user_id = (SELECT user_id FROM account WHERE account_id = account_to)) AS recipient, " +
+                        "amount FROM transfer WHERE (SELECT account_id FROM account WHERE user_id = 1002) IN(account_from, account_to); ", conn);
                     cmd.Parameters.AddWithValue("@user_id", userId);
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     while (reader.Read())
                     {
-                        Transfer transfer = GetTransferFromReader(reader);
+                        ViewableTransfer transfer = GetViewableTransferFromReader(reader);
                         transfers.Add(transfer);
                     }
                     if (transfers == null)
                     {
                         return null;
                     }
-                    return transfers.Select(t => new Transfer(t.TransferId, t.TransferStatusId, t.TransferTypeId, t.AccountFrom, t.AccountTo, t.Amount)).ToList();//this lambda function takes each user and "massages" them into transfer recipients
+                    //return transfers.Select(t => new Transfer(t.TransferId, t.TransferStatusId, t.TransferTypeId, t.AccountFrom, t.AccountTo, t.Amount)).ToList();//this lambda function takes each user and "massages" them into transfer recipients
                 }
             }
             catch (SqlException)
             {
                 throw;
             }
+            return transfers;
 
         }
         // As an authenticated user of the system, I need to be able to retrieve the details of any transfer based upon the transfer ID.
@@ -203,6 +207,21 @@ namespace TenmoServer.DAO
         public List<Transfer> GetTransfers(User user)
         {
             throw new NotImplementedException();
+        }
+
+        private ViewableTransfer GetViewableTransferFromReader(SqlDataReader reader) // privately build POCO based on sql row
+        {
+            ViewableTransfer t = new ViewableTransfer()
+            {
+                TransferId = Convert.ToInt32(reader["transfer_id"]),
+                TransferTypeId = Convert.ToInt32(reader["transfer_type_id"]),
+                TransferStatusId = Convert.ToInt32(reader["transfer_status_id"]),
+                Sender = Convert.ToString(reader["sender"]),
+                Recipient = Convert.ToString(reader["recipient"]),
+                Amount = Convert.ToDecimal(reader["amount"])
+            };
+
+            return t;
         }
 
         // public List<Transfer> GetTransfersFor(userId, type)
