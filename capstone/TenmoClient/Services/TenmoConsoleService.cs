@@ -80,7 +80,6 @@ namespace TenmoClient.Services
                 Console.WriteLine($"{transfer.TransferId}          {fromOrTo}          ${transfer.Amount}");
             }
             Console.WriteLine("-----------------------------------------");
-            Console.WriteLine("Please enter transfer ID to view details(0 to cancel): ");
         }
 
         public void SendBucks(List<Transfer> transfers, int transferId, ApiUser user, decimal amount) // print
@@ -133,14 +132,14 @@ namespace TenmoClient.Services
             decimal amountToSend = 0;
             while(!isValidAmount)
             {
-                amountToSend = PromptForDecimal("Enter amount to send: ");
+                amountToSend = PromptForDecimal("Enter amount to send");
                 if (amountToSend <= sendersBalance)
                 {
                     isValidAmount = true;
                 }
                 else
                 {
-                    Console.WriteLine("please enter valid amount: ");
+                    Console.WriteLine("please enter valid amount");
                 }
             }
             return amountToSend;
@@ -149,7 +148,7 @@ namespace TenmoClient.Services
         //internal // output: transfer ids, other usernames, amounts 
         // input list transfers & list of users, account list?
 
-        public void ViewSpecificTransfer(ViewableTransfer transfer)
+        public void ViewSpecificTransfer(TransferHistory transfer)
         {
             Console.WriteLine("--------------------------------------------");
             Console.WriteLine("Transfer Details");

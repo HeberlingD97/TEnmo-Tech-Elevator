@@ -27,5 +27,6 @@ namespace TenmoServer.DAO
         public Transfer CreateTransfer(Transfer transfer);
         // As an authenticated user of the system, I need to be able to retrieve the details of any transfer based upon the transfer ID.
         public Transfer GetSpecificTransfer(int transferId);
+        public TransferHistory GetPreviousTransfer(int userId, int transferId);
     }
 }

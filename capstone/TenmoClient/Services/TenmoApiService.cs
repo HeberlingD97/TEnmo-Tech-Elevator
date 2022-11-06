@@ -30,10 +30,18 @@ namespace TenmoClient.Services
 
         }
 
-        public ViewableTransfer ViewSpecificTransfer(ApiUser user, int transferId)
+        public TransferHistory ViewPreviousTransfer(ApiUser user, int transferId)
         {
-            RestRequest request = new RestRequest($"/transfers/{transferId}/");
-            IRestResponse<ViewableTransfer> response = client.Get<ViewableTransfer>(request);
+            RestRequest request = new RestRequest($"/transfers/{user.UserId}/{transferId}");
+            IRestResponse<TransferHistory> response = client.Get<TransferHistory>(request);
+
+            CheckForError(response);
+            return response.Data;
+        }
+        public Transfer ViewSpecificTransfer(ApiUser user, int transferId)
+        {
+            RestRequest request = new RestRequest($"/transfers/{transferId}");
+            IRestResponse<Transfer> response = client.Get<Transfer>(request);
 
             CheckForError(response);
             return response.Data;

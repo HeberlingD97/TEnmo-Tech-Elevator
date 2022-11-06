@@ -131,12 +131,23 @@ namespace TenmoClient
         {
             List<TransferHistory> transfers = tenmoApiService.GetPastTransfers(user.UserId);
             console.ViewPastTransfers(transfers, user.Username);    //Invesigate
-            console.Pause();
             // would you like to view specific transfer? 
-            int willSeeTransfer = console.PromptForInteger("Would you like to view a specific transfer? Press 1 for \'yes\' or 0 for \'no.\' ");
-            if (willSeeTransfer == 1)
+            bool willViewTransfer = false;
+            while (!willViewTransfer)
             {
-                ViewSpecificTranfer();
+                int transferId = console.PromptForInteger("Please enter transfer ID to view details(0 to cancel)");
+                if (transferId == 0)
+                {
+                    break;
+                }
+                for(int i = 0; i < transfers.Count; i++)
+                {
+                    if (transfers[i].TransferId == transferId)
+                    {
+                        ViewSpecificTransfer(transferId);
+                        willViewTransfer = true;
+                    }
+                }
             }
             console.Pause();
             // readline?
@@ -156,10 +167,10 @@ namespace TenmoClient
             console.Pause();
         }
 
-        private void ViewSpecificTranfer() //TODO
+        private void ViewSpecificTransfer(int transferId) //TODO
         {
-            int transferId = console.PromptForInteger("Please entire the Transfer ID of the transfer you would like to view: ");
-            ViewableTransfer transfer = tenmoApiService.ViewSpecificTransfer(user, transferId);
+            //int transferId = console.PromptForInteger("");
+            TransferHistory transfer = tenmoApiService.ViewPreviousTransfer(user, transferId);
             console.ViewSpecificTransfer(transfer);
             console.Pause();
         }
