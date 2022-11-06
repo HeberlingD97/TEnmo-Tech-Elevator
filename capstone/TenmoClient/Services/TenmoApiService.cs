@@ -58,7 +58,7 @@ namespace TenmoClient.Services
 
         public Transfer UpdateBalanceForTransferAccounts(Transfer updatingTransfer)
         {
-            RestRequest req = new RestRequest($"transfer/{updatingTransfer.TransferId}");
+            RestRequest req = new RestRequest($"transfers/{updatingTransfer.TransferId}");
             req.AddJsonBody(updatingTransfer);
             IRestResponse<Transfer> response = client.Put<Transfer>(req);
             CheckForError(response);

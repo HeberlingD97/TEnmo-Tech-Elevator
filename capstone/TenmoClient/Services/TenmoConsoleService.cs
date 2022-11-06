@@ -146,6 +146,9 @@ namespace TenmoClient.Services
             return amountToSend;
         }
 
+        //internal // output: transfer ids, other usernames, amounts 
+            // input list transfers & list of users, account list?
+
         //public void ViewSpecificTransfer()
         //{
         //    Console.WriteLine("--------------------------------------------");

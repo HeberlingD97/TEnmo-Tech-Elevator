@@ -16,7 +16,7 @@ namespace TenmoServer.DAO
         //      A Sending Transfer has an initial status of Approved.
         //public void UpdateSendingTransferStatus(int transferId);
         //      The receiver's account balance is increased by the amount of the transfer.
-        public void UpdateBalanceForTransferAccounts(Transfer transfer);//removed return
+        public bool UpdateBalanceForTransferAccounts(Transfer transfer);//removed return
         //      The sender's account balance is decreased by the amount of the transfer.
 
         //      I must not be allowed to send money to myself.

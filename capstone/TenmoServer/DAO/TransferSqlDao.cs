@@ -76,7 +76,11 @@ namespace TenmoServer.DAO
                         TransferHistory t = GetTransferHistoryFromReader(reader);
                         transfers.Add(t);
                     }
-
+                    if (transfers == null)
+                    {
+                        return null;
+                    }
+                    return transfers.Select(t => new Transfer(t.TransferId, t.TransferStatusId, t.TransferTypeId, t.AccountFrom, t.AccountTo, t.Amount)).ToList();//this lambda function takes each user and "massages" them into transfer recipients
                 }
             }
             catch (SqlException)
@@ -142,7 +146,7 @@ namespace TenmoServer.DAO
         //      A Sending Transfer has an initial status of Approved.
 
         //      The receiver's account balance is increased by the amount of the transfer.
-        public void UpdateBalanceForTransferAccounts(Transfer transfer) // possibly edit transfer
+        public bool UpdateBalanceForTransferAccounts(Transfer transfer) // possibly edit transfer
         {
             try // try reading from SQL all data where we have given uder id
             {
@@ -160,13 +164,15 @@ namespace TenmoServer.DAO
                     cmdUpdateRecipient.Parameters.AddWithValue("@account_id", transfer.AccountTo);
                     cmdUpdateRecipient.ExecuteNonQuery();
                  
-                    return;
+                    return true;
                 }
             }
             catch (SqlException)
             {
                 throw;
             }
+                
+            
         }
         //      The sender's account balance is decreased by the amount of the transfer.
 

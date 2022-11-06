@@ -12,7 +12,7 @@ namespace TenmoServer.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class TransfersController : ControllerBase
     {
         private readonly ITransferDao transferDao; // have private variable to represent dao object
@@ -60,20 +60,20 @@ namespace TenmoServer.Controllers
             }
         }
 
-        //[HttpPut("updateBalances")]
-        //public ActionResult<bool> UpdateBalanceForTransferAccounts(Transfer transfer)
-        //{
-        //    bool result = transferDao.UpdateBalanceForTransferAccounts(transfer);
-        //    if (result)
-        //    {
-        //        return Ok();
-        //    }
-        //    else
-        //    {
-        //        return StatusCode(500);
-        //    }
+        [HttpPut("updateBalances")]
+        public ActionResult<bool> UpdateBalanceForTransferAccounts(Transfer transfer)
+        {
+            bool result = transferDao.UpdateBalanceForTransferAccounts(transfer);
+            if (result)
+            {
+                return Ok();
+            }
+            else
+            {
+                return StatusCode(500);
+            }
 
-        // }
+        }
 
         [HttpGet("userList")] //users to transfer to
          public ActionResult<List<TransferRecipient>> GetListOfUsers()

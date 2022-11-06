@@ -140,8 +140,8 @@ namespace TenmoClient
             Account fromAccount = tenmoApiService.GetAccount(user);
             decimal amount = console.PromptForTransferAmount(fromAccount.Balance);
             tenmoApiService.CreateTransfer(fromAccount.AccountId, toAccount.AccountId, amount);
+            console.PrintSuccess("Transfer successful.");
             console.Pause();
-
         }
 
 
