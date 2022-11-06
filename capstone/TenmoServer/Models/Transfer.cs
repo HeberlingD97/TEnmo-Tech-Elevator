@@ -41,39 +41,11 @@ namespace TenmoServer.Models
         }
     }
 
-    public class ViewableTransfer
+    public class TransferHistory
     {
-        [Required(ErrorMessage = "The field \'Transfer ID\' is required.")]
         public int TransferId { get; set; }
-        public int TransferTypeId { get; set; } = 2;
-        public int TransferStatusId { get; set; } = 2;
-        [Required(ErrorMessage = "The field \'Sender\' is required.")]
         public string Sender { get; set; }
-        [Required(ErrorMessage = "The field \'Recipient\' is required.")]
         public string Recipient { get; set; }
-        [Range(0.01, 1000000000000, ErrorMessage = "User must transfer a positive amount.")]
         public decimal Amount { get; set; }
-
-        public ViewableTransfer()
-        {
-
-        }
-
-        public ViewableTransfer(int transferId, int transferTypeId, int transferStatusId, string sender, string recipient, decimal amount)
-        {
-            this.TransferId = transferId;
-            this.TransferTypeId = transferTypeId;
-            this.TransferStatusId = transferStatusId;
-            this.Sender = sender;
-            this.Recipient = recipient;
-            this.Amount = amount;
-        }
-        public ViewableTransfer(int transferId, string sender, string recipient, decimal amount)
-        {
-            this.TransferId = transferId;
-            this.Sender = sender;
-            this.Recipient = recipient;
-            this.Amount = amount;
-        }
     }
 }
