@@ -80,7 +80,7 @@ namespace TenmoServer.DAO
                     {
                         return null;
                     }
-                    return transfers.Select(t => new Transfer(t.TransferId, t.TransferStatusId, t.TransferTypeId, t.AccountFrom, t.AccountTo, t.Amount)).ToList();//this lambda function takes each user and "massages" them into transfer recipients
+                    //return transfers.Select(t => new Transfer(t.TransferId, t.TransferStatusId, t.TransferTypeId, t.AccountFrom, t.AccountTo, t.Amount)).ToList();//this lambda function takes each user and "massages" them into transfer recipients
                 }
             }
             catch (SqlException)
@@ -90,14 +90,46 @@ namespace TenmoServer.DAO
             return transfers;
 
         }
+        public TransferHistory GetPreviousTransfer(int userId, int transferId) 
+        {
+            TransferHistory returnTransfer = null; // set up initial account
 
+            try // try reading from SQL all data where we have given uder id
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
 
+                    SqlCommand cmd = new SqlCommand("SELECT transfer_id, " +
+                        "(SELECT username FROM tenmo_user WHERE user_id = " +
+                            "(SELECT user_id FROM account WHERE account_id = account_from)) AS sender, " +
+                        "(SELECT username FROM tenmo_user WHERE user_id = " +
+                            "(SELECT user_id FROM account WHERE account_id = account_to)) AS recipient, " +
+                        "amount FROM transfer " +
+                    "WHERE" +
+                        "(SELECT account_id FROM account WHERE user_id = @user_id) " +
+                        "IN(account_from, account_to) AND transfer_id = @transfer_id;", conn);
+                    cmd.Parameters.AddWithValue("@transfer_id", transferId);
+                    cmd.Parameters.AddWithValue("@user_id", userId);
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    if (reader.Read()) // should only read 1 row of table
+                    {
+                        returnTransfer = GetTransferHistoryFromReader(reader);
+                    }
+                }
+            }
+            catch (SqlException)
+            {
+                throw;
+            }
+            return returnTransfer;
+        }
         // As an authenticated user of the system, I need to be able to retrieve the details of any transfer based upon the transfer ID.
         public Transfer GetSpecificTransfer(int transferId)//removed user object param and if user is null
         {
             Transfer returnTransfer = null; // set up initial account
             
-
             try // try reading from SQL all data where we have given uder id
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -228,6 +260,21 @@ namespace TenmoServer.DAO
         {
             throw new NotImplementedException();
         }
+
+        //private ViewableTransfer GetViewableTransferFromReader(SqlDataReader reader) // privately build POCO based on sql row
+        //{
+        //    ViewableTransfer t = new ViewableTransfer()
+        //    {
+        //        TransferId = Convert.ToInt32(reader["transfer_id"]),
+        //        TransferTypeId = Convert.ToInt32(reader["transfer_type_id"]),
+        //        TransferStatusId = Convert.ToInt32(reader["transfer_status_id"]),
+        //        Sender = Convert.ToString(reader["sender"]),
+        //        Recipient = Convert.ToString(reader["recipient"]),
+        //        Amount = Convert.ToDecimal(reader["amount"])
+        //    };
+
+        //    return t;
+        //}
 
         // public List<Transfer> GetTransfersFor(userId, type)
         //{

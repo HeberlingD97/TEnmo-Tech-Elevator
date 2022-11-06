@@ -9,10 +9,13 @@ namespace TenmoServer.Models
     public class Transfer
     {
         // TODO: do we need to require any other fields? do we need descriptions for type & status?
+        [Required(ErrorMessage = "The field \'Transfer ID\' is required.")]
         public int TransferId { get; set; }
         public int TransferTypeId { get; set; } = 2;
         public int TransferStatusId { get; set; } = 2;
+        [Required(ErrorMessage = "The field \'Account From\' is required.")]
         public int AccountFrom { get; set; }
+        [Required(ErrorMessage = "The field \'Account To\' is required.")]
         public int AccountTo { get; set; }
         [Range(0.01, 1000000000000, ErrorMessage = "User must transfer a positive amount.")] // TODO: also can't transfer more than what is in sender's account
         // TODO: can we cast this to a decimal? Quick fix was setting the max to one trillion

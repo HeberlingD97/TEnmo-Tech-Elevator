@@ -12,6 +12,7 @@ namespace TenmoClient
         private readonly TenmoConsoleService console = new TenmoConsoleService();
         private readonly TenmoApiService tenmoApiService;
         private ApiUser user = null;
+        
 
         public TenmoApp(string apiUrl)
         {
@@ -67,7 +68,7 @@ namespace TenmoClient
         private bool RunAuthenticated()
         {
             console.PrintMainMenu(tenmoApiService.Username);
-            int menuSelection = console.PromptForInteger("Please choose an option", 0, 6);
+            int menuSelection = console.PromptForInteger("Please choose an option", 0, 7);
             if (menuSelection == 0)
             {
                 // Exit the loop
@@ -103,7 +104,12 @@ namespace TenmoClient
                 // Request TE bucks
             }
 
-            if (menuSelection == 6)
+            //if (menuSelection == 6)
+            //{
+            //    // View Specific Transfer
+            //    ViewSpecificTransfer();
+            //}
+            if (menuSelection == 7)
             {
                 // Log out
                 tenmoApiService.Logout();
@@ -125,8 +131,25 @@ namespace TenmoClient
         {
             List<TransferHistory> transfers = tenmoApiService.GetPastTransfers(user.UserId);
             console.ViewPastTransfers(transfers, user.Username);    //Invesigate
-            console.Pause();
             // would you like to view specific transfer? 
+            bool willViewTransfer = false;
+            while (!willViewTransfer)
+            {
+                int transferId = console.PromptForInteger("Please enter transfer ID to view details(0 to cancel)");
+                if (transferId == 0)
+                {
+                    break;
+                }
+                for(int i = 0; i < transfers.Count; i++)
+                {
+                    if (transfers[i].TransferId == transferId)
+                    {
+                        ViewSpecificTransfer(transferId);
+                        willViewTransfer = true;
+                    }
+                }
+            }
+            console.Pause();
             // readline?
             // tenmoapiservice view specific transfer
         }
@@ -144,7 +167,13 @@ namespace TenmoClient
             console.Pause();
         }
 
-
+        private void ViewSpecificTransfer(int transferId) //TODO
+        {
+            //int transferId = console.PromptForInteger("");
+            TransferHistory transfer = tenmoApiService.ViewPreviousTransfer(user, transferId);
+            console.ViewSpecificTransfer(transfer);
+            console.Pause();
+        }
 
 
         private void Login()

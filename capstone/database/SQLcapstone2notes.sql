@@ -87,3 +87,6 @@ JOIN tenmo_user ON account.user_id = tenmo_user.user_id
 DELETE FROM transfer
 
 SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfer JOIN account ON account_id IN (account_from, account_to) WHERE user_id = 1002;
+
+SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfer JOIN account ON account_id IN (account_from, account_to) WHERE user_id = 1003;
+SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfer JOIN account ON account_id IN (account_from, account_to) WHERE user_id = 1001;

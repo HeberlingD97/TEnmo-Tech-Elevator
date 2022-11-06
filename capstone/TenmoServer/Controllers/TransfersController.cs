@@ -45,6 +45,19 @@ namespace TenmoServer.Controllers
                 return NotFound();
             }
         }
+        [HttpGet("{userId}/{transferId}")]
+        public ActionResult<TransferHistory> GetPreviousTransfer(int userId, int transferId)
+        {
+            TransferHistory transfer = transferDao.GetPreviousTransfer(userId, transferId);
+            if (transfer != null)
+            {
+                return Ok(transfer);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
 
         // GET: TransfersController
         [HttpGet("list/{userId}")] //possibly use user url

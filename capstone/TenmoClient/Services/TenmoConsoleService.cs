@@ -80,7 +80,6 @@ namespace TenmoClient.Services
                 Console.WriteLine($"{transfer.TransferId}          {fromOrTo}          ${transfer.Amount}");
             }
             Console.WriteLine("-----------------------------------------");
-            Console.WriteLine("Please enter transfer ID to view details(0 to cancel): ");
         }
 
         public void SendBucks(List<Transfer> transfers, int transferId, ApiUser user, decimal amount) // print
@@ -133,34 +132,34 @@ namespace TenmoClient.Services
             decimal amountToSend = 0;
             while(!isValidAmount)
             {
-                amountToSend = PromptForDecimal("Enter amount to send: ");
+                amountToSend = PromptForDecimal("Enter amount to send");
                 if (amountToSend <= sendersBalance)
                 {
                     isValidAmount = true;
                 }
                 else
                 {
-                    Console.WriteLine("please enter valid amount: ");
+                    Console.WriteLine("please enter valid amount");
                 }
             }
             return amountToSend;
         }
 
         //internal // output: transfer ids, other usernames, amounts 
-            // input list transfers & list of users, account list?
+        // input list transfers & list of users, account list?
 
-        //public void ViewSpecificTransfer()
-        //{
-        //    Console.WriteLine("--------------------------------------------");
-        //    Console.WriteLine("Transfer Details");
-        //    Console.WriteLine("--------------------------------------------");
-        //    Console.WriteLine($"Id: {transfer.TransferId}");
-        //    Console.WriteLine($"From: {/*ApiUser Account ID*/}");
-        //    Console.WriteLine($"To: Me Myselfandi");
-        //    Console.WriteLine($"Type: Send"); // read from sql?
-        //    Console.WriteLine($"Status: Approved");
-        //    Console.WriteLine($"Amount: {transfer.amount}");
-        //}
+        public void ViewSpecificTransfer(TransferHistory transfer)
+        {
+            Console.WriteLine("--------------------------------------------");
+            Console.WriteLine("Transfer Details");
+            Console.WriteLine("--------------------------------------------");
+            Console.WriteLine($"Id: {transfer.TransferId}");
+            Console.WriteLine($"From: {transfer.Sender}"); // username
+            Console.WriteLine($"To: {transfer.Recipient}");
+            Console.WriteLine($"Type: Send"); // read from sql?
+            Console.WriteLine($"Status: Approved");
+            Console.WriteLine($"Amount: {transfer.Amount}");
+        }
 
     }
 }
