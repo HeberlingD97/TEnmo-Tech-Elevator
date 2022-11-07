@@ -90,3 +90,21 @@ SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_
 
 SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfer JOIN account ON account_id IN (account_from, account_to) WHERE user_id = 1003;
 SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfer JOIN account ON account_id IN (account_from, account_to) WHERE user_id = 1001;
+
+
+SELECT transfer_id, transfer_status_id,
+	(SELECT username FROM tenmo_user WHERE user_id = (SELECT user_id FROM account WHERE account_id = account_from)) AS sender, 
+	(SELECT username FROM tenmo_user WHERE user_id = (SELECT user_id FROM account WHERE account_id = account_to)) AS recipient , 
+	amount FROM transfer 
+WHERE 
+	(SELECT account_id FROM account WHERE user_id = 1002) 
+	IN (account_from, account_to);
+
+SELECT transfer_id, 
+(SELECT username FROM tenmo_user WHERE user_id = 
+(SELECT user_id FROM account WHERE account_id = account_from)) AS sender, 
+(SELECT username FROM tenmo_user WHERE user_id = 
+(SELECT user_id FROM account WHERE account_id = account_to)) AS recipient, 
+amount FROM transfer 
+WHERE (SELECT account_id FROM account WHERE user_id = 1001) 
+IN(account_from, account_to) AND transfer_id = 3009;

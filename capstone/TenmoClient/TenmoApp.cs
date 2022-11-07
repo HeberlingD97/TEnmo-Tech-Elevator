@@ -68,7 +68,7 @@ namespace TenmoClient
         private bool RunAuthenticated()
         {
             console.PrintMainMenu(tenmoApiService.Username);
-            int menuSelection = console.PromptForInteger("Please choose an option", 0, 7);
+            int menuSelection = console.PromptForInteger("Please choose an option", 0, 6);
             if (menuSelection == 0)
             {
                 // Exit the loop
@@ -106,11 +106,6 @@ namespace TenmoClient
 
             if (menuSelection == 6)
             {
-                tenmoApiService.Logout();
-            
-            }
-            if (menuSelection == 7)
-            {
                 // Log out
                 tenmoApiService.Logout();
                 console.PrintSuccess("You are now logged out");
@@ -130,7 +125,7 @@ namespace TenmoClient
         private void DisplayPastTransfers()
         {
             List<TransferHistory> transfers = tenmoApiService.GetPastTransfers(user.UserId);
-            console.ViewPastTransfers(transfers, user.Username);    //Invesigate
+            console.ViewPastTransfers(transfers, user.Username);
             // would you like to view specific transfer? 
             bool willViewTransfer = false;
             while (!willViewTransfer)
@@ -172,7 +167,7 @@ namespace TenmoClient
             //int transferId = console.PromptForInteger("");
             TransferHistory transfer = tenmoApiService.ViewPreviousTransfer(user, transferId);
             console.ViewSpecificTransfer(transfer);
-            console.Pause();
+            //console.Pause();
         }
 
 
