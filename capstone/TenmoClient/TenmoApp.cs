@@ -104,11 +104,11 @@ namespace TenmoClient
                 // Request TE bucks
             }
 
-            //if (menuSelection == 6)
-            //{
-            //    // View Specific Transfer
-            //    ViewSpecificTransfer();
-            //}
+            if (menuSelection == 6)
+            {
+                tenmoApiService.Logout();
+            
+            }
             if (menuSelection == 7)
             {
                 // Log out
