@@ -91,6 +91,7 @@ namespace TenmoClient
             if (menuSelection == 3)
             {
                 // View your pending requests
+                DisplayPendingTransfers();
             }
 
             if (menuSelection == 4)
@@ -124,7 +125,7 @@ namespace TenmoClient
 
         private void DisplayPastTransfers()
         {
-            List<TransferHistory> transfers = tenmoApiService.GetPastTransfers(user.UserId);
+            List<TransferSent> transfers = tenmoApiService.GetPastTransfers(user.UserId);
             console.ViewPastTransfers(transfers, user.Username);
             // would you like to view specific transfer? 
             bool willViewTransfer = false;
@@ -157,7 +158,7 @@ namespace TenmoClient
             //TODO: filter on database side
             Account fromAccount = tenmoApiService.GetAccount(user);
             decimal amount = console.PromptForTransferAmount(fromAccount.Balance);
-            tenmoApiService.CreateTransfer(fromAccount.AccountId, toAccount.AccountId, amount);
+            tenmoApiService.CreateSendingTransfer(fromAccount.AccountId, toAccount.AccountId, amount);
             console.PrintSuccess("Transfer successful.");
             console.Pause();
         }
@@ -165,11 +166,41 @@ namespace TenmoClient
         private void ViewSpecificTransfer(int transferId) //TODO
         {
             //int transferId = console.PromptForInteger("");
-            TransferHistory transfer = tenmoApiService.ViewPreviousTransfer(user, transferId);
+            TransferSent transfer = tenmoApiService.ViewPreviousTransfer(user, transferId);
             console.ViewSpecificTransfer(transfer);
             //console.Pause();
         }
 
+
+        // #8. View Pending Transfers
+        private void DisplayPendingTransfers()
+        {
+            List<TransferRequest> transfers = tenmoApiService.GetPendingTransfers(user.UserId);
+            console.ViewPendingTransfers(transfers, user.Username);
+            // would you like to view specific transfer? 
+            bool willViewTransfer = false;
+            while (!willViewTransfer)
+            {
+                int transferId = console.PromptForInteger("Please enter transfer ID to view details(0 to cancel)");
+                if (transferId == 0)
+                {
+                    break;
+                }
+                for (int i = 0; i < transfers.Count; i++)
+                {
+                    if (transfers[i].TransferId == transferId)
+                    {
+                        //ViewSpecificTransfer(transferId); #9
+                        willViewTransfer = true;
+                    }
+                }
+            }
+            console.Pause();
+            // readline?
+            // tenmoapiservice view specific transfer
+            //TODO: CURRENTLY, this function shows previous transfers and transfers created now.
+            // Essentially, this programm does not differentiate transfers. Code needs clarification!!!!
+        }
 
         private void Login()
         {

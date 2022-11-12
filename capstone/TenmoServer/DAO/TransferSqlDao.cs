@@ -49,9 +49,9 @@ namespace TenmoServer.DAO
         //      A transfer should include the User IDs of the from and to users and the amount of TE Bucks.
 
         // As an authenticated user of the system, I need to be able to see transfers I have sent or received.
-        public List<TransferHistory> GetTransfers(int userId)//changed from user to user id
+        public List<TransferSent> GetTransfers(int userId)//changed from user to user id
         {
-            List<TransferHistory> transfers = new List<TransferHistory>();
+            List<TransferSent> transfers = new List<TransferSent>();
 
             try // try reading from SQL all data where we have given uder id
             {
@@ -59,6 +59,8 @@ namespace TenmoServer.DAO
                 {
                     conn.Open();
                     SqlCommand cmd = new SqlCommand("SELECT transfer_id, " +
+                        "(SELECT transfer_status_desc FROM transfer_status WHERE transfer_status_id = 2) AS transfer_status, " +
+                        "(SELECT transfer_type_desc FROM transfer_type WHERE transfer_type_id = 2) AS transfer_type, " +
                         "(SELECT username FROM tenmo_user WHERE user_id = " +
                             "(SELECT user_id FROM account WHERE account_id = account_from)) AS sender, " +
                         "(SELECT username FROM tenmo_user WHERE user_id = " +
@@ -73,7 +75,7 @@ namespace TenmoServer.DAO
 
                     while (reader.Read())
                     {
-                        TransferHistory t = GetTransferHistoryFromReader(reader);
+                        TransferSent t = GetTransferHistoryFromReader(reader);
                         transfers.Add(t);
                     }
                     if (transfers == null)
@@ -90,9 +92,9 @@ namespace TenmoServer.DAO
             return transfers;
 
         }
-        public TransferHistory GetPreviousTransfer(int userId, int transferId) 
+        public TransferSent GetPreviousTransfer(int userId, int transferId) 
         {
-            TransferHistory returnTransfer = null; // set up initial account
+            TransferSent returnTransfer = null; // set up initial account
 
             try // try reading from SQL all data where we have given uder id
             {
@@ -153,7 +155,7 @@ namespace TenmoServer.DAO
             return returnTransfer;
         }
         // As an authenticated user of the system, I need to be able to send a transfer of a specific amount of TE Bucks to a registered user.
-        public Transfer CreateTransfer(Transfer transfer) //TODO
+        public Transfer CreateSendingTransfer(Transfer transfer) //TODO
         {
             int newTransferId;
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -212,6 +214,51 @@ namespace TenmoServer.DAO
         //      I can't send more TE Bucks than I have in my account.
         //      I can't send a zero or negative amount.
 
+        //#8. Get Pending Transfers List
+        public List<TransferRequest> GetPendingTransfers(int userId)//changed from user to user id
+        {
+            List<TransferRequest> transfers = new List<TransferRequest>();
+
+            try // try reading from SQL all data where we have given uder id
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand("SELECT transfer_id, " +
+                        "(SELECT transfer_status_desc FROM transfer_status WHERE transfer_status_id = 1) AS transfer_status, " +
+                        "(SELECT transfer_type_desc FROM transfer_type WHERE transfer_type_id = 1) AS transfer_type, " +
+                        "(SELECT username FROM tenmo_user WHERE user_id = " +
+                            "(SELECT user_id FROM account WHERE account_id = account_from)) AS sender, " +
+                        "(SELECT username FROM tenmo_user WHERE user_id = " +
+                            "(SELECT user_id FROM account WHERE account_id = account_to)) AS recipient, " +
+                        "amount FROM transfer " +
+                    "WHERE" +
+                        "(SELECT account_id FROM account WHERE user_id = @user_id) " +
+                        "IN(account_from, account_to);", conn);
+
+                    cmd.Parameters.AddWithValue("@user_id", userId);
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        TransferRequest t = GetPendingTransfersFromReader(reader);
+                        transfers.Add(t);
+                    }
+                    if (transfers == null)
+                    {
+                        return null;
+                    }
+                    //return transfers.Select(t => new Transfer(t.TransferId, t.TransferStatusId, t.TransferTypeId, t.AccountFrom, t.AccountTo, t.Amount)).ToList();//this lambda function takes each user and "massages" them into transfer recipients
+                }
+            }
+            catch (SqlException)
+            {
+                throw;
+            }
+            return transfers;
+
+        }
+
         private Transfer GetTransferFromReader(SqlDataReader reader) // privately build POCO based on sql row
         {
             Transfer t = new Transfer()
@@ -228,11 +275,27 @@ namespace TenmoServer.DAO
         }
 
 
-        private TransferHistory GetTransferHistoryFromReader(SqlDataReader reader)
+        private TransferSent GetTransferHistoryFromReader(SqlDataReader reader)
         {
-            return new TransferHistory()
+            return new TransferSent()
             {
                 TransferId = Convert.ToInt32(reader["transfer_id"]),
+                TransferStatus = Convert.ToString(reader["transfer_status"]),
+                TransferType = Convert.ToString(reader["transfer_type"]),
+                Sender = Convert.ToString(reader["sender"]),
+                Recipient = Convert.ToString(reader["recipient"]),
+                Amount = Convert.ToDecimal(reader["amount"])
+            };
+
+        }
+
+        private TransferRequest GetPendingTransfersFromReader(SqlDataReader reader)
+        {
+            return new TransferRequest()
+            {
+                TransferId = Convert.ToInt32(reader["transfer_id"]),
+                TransferStatus = Convert.ToString(reader["transfer_status"]),
+                TransferType = Convert.ToString(reader["transfer_type"]),
                 Sender = Convert.ToString(reader["sender"]),
                 Recipient = Convert.ToString(reader["recipient"]),
                 Amount = Convert.ToDecimal(reader["amount"])

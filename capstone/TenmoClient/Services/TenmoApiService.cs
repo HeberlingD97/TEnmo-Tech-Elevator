@@ -20,20 +20,20 @@ namespace TenmoClient.Services
             // TODO:  unable to reach server to test if this method actually works
         }
 
-        public List<TransferHistory> GetPastTransfers(int userId)
+        public List<TransferSent> GetPastTransfers(int userId)
         {
             RestRequest request = new RestRequest($"transfers/list/{userId}");
-            IRestResponse<List<TransferHistory>> response = client.Get<List<TransferHistory>>(request);
+            IRestResponse<List<TransferSent>> response = client.Get<List<TransferSent>>(request);
 
             CheckForError(response);
             return response.Data;
 
         }
 
-        public TransferHistory ViewPreviousTransfer(ApiUser user, int transferId)
+        public TransferSent ViewPreviousTransfer(ApiUser user, int transferId)
         {
             RestRequest request = new RestRequest($"/transfers/{user.UserId}/{transferId}");
-            IRestResponse<TransferHistory> response = client.Get<TransferHistory>(request);
+            IRestResponse<TransferSent> response = client.Get<TransferSent>(request);
 
             CheckForError(response);
             return response.Data;
@@ -47,7 +47,7 @@ namespace TenmoClient.Services
             return response.Data;
         }
 
-        public Transfer CreateTransfer(int fromUser, int toUser, decimal amt)//instead of passing in a new transfer bc datatbase crsates the transfer 
+        public Transfer CreateSendingTransfer(int fromUser, int toUser, decimal amt)//instead of passing in a new transfer bc datatbase crsates the transfer 
         {
             RestRequest req = new RestRequest("transfers");
             req.AddJsonBody(new Transfer { AccountFrom = fromUser, AccountTo = toUser, Amount = amt });
@@ -74,6 +74,15 @@ namespace TenmoClient.Services
 
         }
 
-        
+        //#8. Get Pending Transfers
+        public List<TransferRequest> GetPendingTransfers(int userId)
+        {
+            RestRequest request = new RestRequest($"transfers/list/pending/{userId}");
+            IRestResponse<List<TransferRequest>> response = client.Get<List<TransferRequest>>(request);
+
+            CheckForError(response);
+            return response.Data;
+        }
+
     }
 }

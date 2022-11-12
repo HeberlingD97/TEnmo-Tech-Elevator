@@ -41,9 +41,21 @@ namespace TenmoServer.Models
         }
     }
 
-    public class TransferHistory
+    public class TransferSent
     {
         public int TransferId { get; set; }
+        public string TransferType { get; set; } = "Sending"; // default = ID for Sending = 2
+        public string TransferStatus { get; set; } = "Approved"; // default = ID for Approved = 2
+        public string Sender { get; set; }
+        public string Recipient { get; set; }
+        public decimal Amount { get; set; }
+    }
+
+    public class TransferRequest
+    {
+        public int TransferId { get; set; }
+        public string TransferType { get; set; } = "Request"; // default = ID for Request = 1
+        public string TransferStatus { get; set; } = "Pending"; // default = ID for Pending = 1
         public string Sender { get; set; }
         public string Recipient { get; set; }
         public decimal Amount { get; set; }

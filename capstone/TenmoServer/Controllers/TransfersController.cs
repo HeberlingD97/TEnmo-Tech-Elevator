@@ -24,9 +24,9 @@ namespace TenmoServer.Controllers
 
         //POST: TransfersController/Create
         [HttpPost] // TODO: how to make endpoints work? throwing exception that this route is implemented multiple times???
-        public ActionResult<Transfer> CreateTransfer(Transfer transfer)
+        public ActionResult<Transfer> CreateSendingTransfer(Transfer transfer)
         {
-            Transfer t = transferDao.CreateTransfer(transfer);
+            Transfer t = transferDao.CreateSendingTransfer(transfer);
             transferDao.UpdateBalanceForTransferAccounts(transfer);
             return Created($"/transfers/{t.AccountFrom}/{t.TransferId}", t);
         }
@@ -46,9 +46,9 @@ namespace TenmoServer.Controllers
             }
         }
         [HttpGet("{userId}/{transferId}")]
-        public ActionResult<TransferHistory> GetPreviousTransfer(int userId, int transferId)
+        public ActionResult<TransferSent> GetPreviousTransfer(int userId, int transferId)
         {
-            TransferHistory transfer = transferDao.GetPreviousTransfer(userId, transferId);
+            TransferSent transfer = transferDao.GetPreviousTransfer(userId, transferId);
             if (transfer != null)
             {
                 return Ok(transfer);
@@ -61,7 +61,7 @@ namespace TenmoServer.Controllers
 
         // GET: TransfersController
         [HttpGet("list/{userId}")] //possibly use user url
-        public ActionResult<List<TransferHistory>> GetTransfers(int userId) // status code 500
+        public ActionResult<List<TransferSent>> GetTransfers(int userId) // status code 500
         {
             if (User.Identity.Name != null)
             {
@@ -94,7 +94,22 @@ namespace TenmoServer.Controllers
             List<TransferRecipient> recipients = transferDao.GetListOfUsers();
             return Ok(recipients);
          }
-        
+
+
+        //#8. Get Pending Transfers
+        // GET: TransfersController
+        [HttpGet("list/pending/{userId}")] 
+        public ActionResult<List<TransferRequest>> GetPendingTransfers(int userId) 
+        {
+            if (User.Identity.Name != null)
+            {
+                return transferDao.GetPendingTransfers(userId);
+            }
+            else
+            {
+                return Unauthorized("Please login to view your pending transfers.");
+            }
+        }
 
     }
 }

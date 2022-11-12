@@ -28,6 +28,7 @@
 	SELECT * FROM account;
 	SELECT * FROM transfer;
 	SELECT * FROM transfer_type;
+	SELECT * FROM transfer_status;
 	INSERT INTO transfer (transfer_status_id, transfer_type_id, account_from, account_to, amount)
 	OUTPUT inserted.transfer_id
 	VALUES (2, 2, 2002, 2003, 10.00);
@@ -108,3 +109,12 @@ SELECT transfer_id,
 amount FROM transfer 
 WHERE (SELECT account_id FROM account WHERE user_id = 1001) 
 IN(account_from, account_to) AND transfer_id = 3009;
+
+
+SELECT transfer_id,
+(SELECT transfer_status_desc FROM transfer_status WHERE transfer_status_id = 2) AS transfer_status,
+(SELECT transfer_type_desc FROM transfer_type WHERE transfer_type_id = 2) AS transfer_type,
+(SELECT username FROM tenmo_user WHERE user_id = (SELECT user_id FROM account WHERE account_id = account_from)) AS sender, 
+(SELECT username FROM tenmo_user WHERE user_id = (SELECT user_id FROM account WHERE account_id = account_to)) AS recipient, 
+amount FROM transfer 
+WHERE (SELECT account_id FROM account WHERE user_id = 1001) IN (account_from, account_to);

@@ -59,25 +59,28 @@ namespace TenmoClient.Services
             Console.WriteLine($"Your current account balance is: ${balance}");
         }
 
-        public void ViewPastTransfers(List<TransferHistory> transfers, string username)
+        public void ViewPastTransfers(List<TransferSent> transfers, string username)
         {
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("Transfers");
             Console.WriteLine("ID           From/ To                 Amount");
             Console.WriteLine("------------------------------------------");
 
-            foreach (TransferHistory transfer in transfers) // Get list of users to call for the username
+            foreach (TransferSent transfer in transfers) // Get list of users to call for the username
             {
-                string fromOrTo = "";
-                if(transfer.Sender == username)
+                if (transfer.TransferStatus == "Approved")
                 {
-                    fromOrTo = $"To: {transfer.Recipient}";//who we sent it to
+                    string fromOrTo = "";
+                    if (transfer.Sender == username)
+                    {
+                        fromOrTo = $"To: {transfer.Recipient}";//who we sent it to
+                    }
+                    else
+                    {
+                        fromOrTo = $"From: {transfer.Sender}";//who its from
+                    }
+                    Console.WriteLine($"{transfer.TransferId}          {fromOrTo}          ${transfer.Amount}");
                 }
-                else
-                {
-                    fromOrTo = $"From: {transfer.Sender}";//who its from
-                }
-                Console.WriteLine($"{transfer.TransferId}          {fromOrTo}          ${transfer.Amount}");
             }
             Console.WriteLine("-----------------------------------------");
         }
@@ -148,7 +151,7 @@ namespace TenmoClient.Services
         //internal // output: transfer ids, other usernames, amounts 
         // input list transfers & list of users, account list?
 
-        public void ViewSpecificTransfer(TransferHistory transfer)
+        public void ViewSpecificTransfer(TransferSent transfer)
         {
             Console.WriteLine("--------------------------------------------");
             Console.WriteLine("Transfer Details");
@@ -161,6 +164,34 @@ namespace TenmoClient.Services
             Console.WriteLine($"Amount: {transfer.Amount}");
         }
 
+
+        // #8. View Pending Transfers
+        public void ViewPendingTransfers(List<TransferRequest> transfers, string username)
+        {
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("Transfers");
+            Console.WriteLine("ID           From/ To                 Amount");
+            Console.WriteLine("------------------------------------------");
+            
+            foreach (TransferRequest transfer in transfers) // Get list of users to call for the username
+            {
+                if (transfer.TransferStatus == "Pending")
+                {
+                    string fromOrTo = "";
+                    if (transfer.Sender == username)
+                    {
+                        fromOrTo = $"To: {transfer.Recipient}";//who we sent it to
+                    }
+                    else
+                    {
+                        fromOrTo = $"From: {transfer.Sender}";//who its from
+                    }
+                    Console.WriteLine($"{transfer.TransferId}          {fromOrTo}          ${transfer.Amount}");
+                }
+                
+            }
+            Console.WriteLine("-----------------------------------------");
+        }
     }
 }
 
